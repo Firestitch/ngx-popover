@@ -1,6 +1,6 @@
 {
-  "name": "@firestitch/package",
-  "title": "package.json -> Rename Title to Component Title",
+  "name": "@firestitch/popover",
+  "title": "Popover",
   "description": "@firestitch/package",
   "version": "9.0.0",
   "repository": {
@@ -43,7 +43,7 @@
     "@angular/router": "^9.0.7",
     "@compodoc/compodoc": "^1.1.11",
     "@firestitch/drawer": "^8.2.0",
-    "@firestitch/example": "^8.0.0",
+    "@firestitch/example": "^9.0.0",
     "@firestitch/iframe": "^8.0.0",
     "@firestitch/label": "^8.1.0",
     "@firestitch/menu": "^9.0.1",
@@ -54,6 +54,7 @@
     "highlight.js": "^9.18.1",
     "lodash-es": "^4.17.15",
     "ng-packagr": "^9.0.0",
+    "ngx-highlightjs": "^4.1.0-beta",
     "ngx-toastr": "^12.0.0",
     "npm-run-all": "^4.1.5",
     "rxjs": "^6.5.4",

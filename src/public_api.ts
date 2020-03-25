@@ -2,6 +2,6 @@
  * Public API Surface of fs-menu
  */
 
-export { FsComponentModule } from './app/fs-component.module';
+export { FsPopoverModule } from './app/fs-popover.module';
 
-export { FsComponentComponent } from './app/components/component/component.component';
+export { FsPopoverComponent } from './app/components/popover/popover.component';

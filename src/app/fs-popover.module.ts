@@ -1,26 +1,27 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { FsComponentComponent } from './components/component/component.component';
+import { FsPopoverComponent } from './components/popover/popover.component';
+
 
 @NgModule({
   imports: [
     CommonModule,
   ],
   exports: [
-    FsComponentComponent,
+    FsPopoverComponent,
   ],
   declarations: [
-    FsComponentComponent,
+    FsPopoverComponent,
   ],
   providers: [
     // FsComponentService,
   ],
 })
-export class FsComponentModule {
-  static forRoot(): ModuleWithProviders<FsComponentModule> {
+export class FsPopoverModule {
+  static forRoot(): ModuleWithProviders<FsPopoverModule> {
     return {
-      ngModule: FsComponentModule,
+      ngModule: FsPopoverModule,
       // providers: [FsComponentService]
     };
   }
