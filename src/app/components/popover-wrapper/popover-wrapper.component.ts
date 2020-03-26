@@ -16,7 +16,7 @@ import {
   templateUrl: 'popover-wrapper.component.html',
   styleUrls: [ 'popover-wrapper.component.scss' ],
   host: {
-    'class': 'mat-elevation-z8 popover-wrapper',
+    'class': 'mat-elevation-z4 popover-wrapper',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
