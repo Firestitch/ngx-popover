@@ -1,4 +1,4 @@
-import { ElementRef, Injectable, Injector, TemplateRef } from '@angular/core';
+import { ComponentRef, ElementRef, Injectable, Injector, TemplateRef } from '@angular/core';
 
 import {
   ComponentType,
@@ -15,19 +15,31 @@ import { FsPopoverWrapperComponent } from '../components/popover-wrapper/popover
 
 @Injectable()
 export class FsPopoverService {
+
+  private _overlayRef: OverlayRef;
+  private _containerRef: ComponentRef<any>;
+
   constructor(
     private _injector: Injector,
     private _overlay: Overlay,
   ) {}
 
+  public get wrapperElement() {
+    return this._containerRef.location.nativeElement;
+  }
 
   public openPopover(el: ElementRef, template: TemplateRef<any>) {
-    const overlayRef = this._createOverlay(el);
+    this._overlayRef = this._createOverlay(el);
     const templatePortal = this._createTempatePortal(template);
 
-    const containerRef = this._openPortalPreview(FsPopoverWrapperComponent, overlayRef);
+    this._containerRef = this._openPortalPreview(FsPopoverWrapperComponent, this._overlayRef);
 
-    containerRef.instance.attachTemplatePortal(templatePortal);
+    this._containerRef.instance.attachTemplatePortal(templatePortal);
+  }
+
+  public close() {
+    this._containerRef.destroy();
+    this._overlayRef.detach();
   }
 
   private _openPortalPreview(

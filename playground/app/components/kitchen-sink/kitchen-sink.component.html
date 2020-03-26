@@ -1,5 +1,7 @@
-<ng-template #tmp>my template</ng-template>
+<ng-template #tmpl>
+  <app-popover-content></app-popover-content>
+</ng-template>
 
-<fs-popover [template]="tmp">
-  test
+<fs-popover [template]="tmpl">
+  <button mat-raised-button color="primary">MouseOver for Popover</button>
 </fs-popover>

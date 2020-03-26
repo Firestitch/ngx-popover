@@ -17,6 +17,7 @@ import {
 } from './components';
 import { AppComponent } from './app.component';
 import { KitchenSinkConfigureComponent } from './components/kitchen-sink-configure';
+import { PopoverContentComponent } from './components/kitchen-sink/popover-content/popover-content.component';
 
 const routes: Routes = [
   { path: '', component: ExamplesComponent },
@@ -40,7 +41,8 @@ const routes: Routes = [
     AppComponent,
     ExamplesComponent,
     KitchenSinkComponent,
-    KitchenSinkConfigureComponent
+    KitchenSinkConfigureComponent,
+    PopoverContentComponent,
   ],
 })
 export class PlaygroundModule {
