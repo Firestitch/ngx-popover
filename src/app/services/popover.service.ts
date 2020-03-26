@@ -28,13 +28,14 @@ export class FsPopoverService {
     return this._containerRef.location.nativeElement;
   }
 
-  public openPopover(el: ElementRef, template: TemplateRef<any>) {
+  public openPopover(el: ElementRef, template: TemplateRef<any>, width?: number) {
     this._overlayRef = this._createOverlay(el);
     const templatePortal = this._createTempatePortal(template);
 
     this._containerRef = this._openPortalPreview(FsPopoverWrapperComponent, this._overlayRef);
 
     this._containerRef.instance.attachTemplatePortal(templatePortal);
+    this._containerRef.instance.width = width;
   }
 
   public close() {
@@ -81,13 +82,15 @@ export class FsPopoverService {
           originX: 'start',
           originY: 'bottom',
           overlayX: 'start',
-          overlayY: 'top'
+          overlayY: 'top',
+          offsetY: 15,
         },
         {
           originX: 'start',
           originY: 'top',
           overlayX: 'start',
           overlayY: 'bottom',
+          offsetY: -15,
         }
       ]);
   }

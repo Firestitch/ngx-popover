@@ -1,7 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  ComponentRef,
+  ComponentRef, ElementRef,
   EmbeddedViewRef,
   ViewChild,
 } from '@angular/core';
@@ -24,8 +24,16 @@ export class FsPopoverWrapperComponent extends BasePortalOutlet {
 
   @ViewChild(CdkPortalOutlet, { static: true }) _portalOutlet: CdkPortalOutlet;
 
-  constructor() {
+  constructor(private _el: ElementRef) {
     super();
+  }
+
+  public set width(value: number) {
+    if (value) {
+      this._el.nativeElement.style.width = value + 'px';
+    } else {
+      this._el.nativeElement.style.width = void 0;
+    }
   }
 
   /**

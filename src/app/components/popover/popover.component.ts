@@ -28,6 +28,9 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
   @Input()
   public leaveDelay = 200;
 
+  @Input()
+  public width;
+
   public closeTimer;
 
   private _hostBounds: DOMRect;
@@ -90,7 +93,7 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
     this._hostBounds = this._elRef.nativeElement.getBoundingClientRect();
 
     this._ngZone.run(() => {
-      this._popoverService.openPopover(this._elRef, this.template);
+      this._popoverService.openPopover(this._elRef, this.template, this.width);
     });
   }
 
