@@ -10,7 +10,6 @@ export class PopoverContentComponent {
   constructor() {
     setTimeout(() => {
       this.loaded = true
-    }, 1000);
+    }, 300);
   }
-
 }

@@ -26,10 +26,13 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
   public template: TemplateRef<any>;
 
   @Input()
-  public leaveDelay = 200;
+  public leaveDelay = 100;
 
   @Input()
-  public width;
+  public width = 300;
+
+  @Input()
+  public wrapperClass;
 
   public closeTimer;
 
@@ -93,7 +96,7 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
     this._hostBounds = this._elRef.nativeElement.getBoundingClientRect();
 
     this._ngZone.run(() => {
-      this._popoverService.openPopover(this._elRef, this.template, this.width);
+      this._popoverService.openPopover(this._elRef, this.template, this.width, this.wrapperClass);
     });
   }
 

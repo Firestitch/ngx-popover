@@ -18,6 +18,7 @@ export class FsPopoverService {
 
   private _overlayRef: OverlayRef;
   private _containerRef: ComponentRef<any>;
+  private _opened = false;
 
   constructor(
     private _injector: Injector,
@@ -28,19 +29,26 @@ export class FsPopoverService {
     return this._containerRef.location.nativeElement;
   }
 
-  public openPopover(el: ElementRef, template: TemplateRef<any>, width?: number) {
+  public openPopover(el: ElementRef, template: TemplateRef<any>, width?: number, wrapperClass?: string) {
+
+    if (this._opened) {
+      return;
+    }
+
+    this._opened = true;
     this._overlayRef = this._createOverlay(el);
     const templatePortal = this._createTempatePortal(template);
-
     this._containerRef = this._openPortalPreview(FsPopoverWrapperComponent, this._overlayRef);
 
     this._containerRef.instance.attachTemplatePortal(templatePortal);
     this._containerRef.instance.width = width;
+    this._containerRef.instance.wrapperClass = wrapperClass;
   }
 
   public close() {
     this._containerRef.destroy();
     this._overlayRef.detach();
+    this._opened = false;
   }
 
   private _openPortalPreview(
@@ -56,14 +64,12 @@ export class FsPopoverService {
     return overlayRef.attach(containerPortal);
   }
 
-
   private _createOverlay(el: ElementRef, config = {}) {
     config = Object.assign(
       {
         positionStrategy: this._createPopupPositionStrategy(el),
         scrollStrategy: this._overlay.scrollStrategies.reposition(),
-        hasBackdrop: true,
-        backdropClass: [],
+        hasBackdrop: false
       }, config);
 
     const overlayConfig = new OverlayConfig(config);
@@ -83,14 +89,14 @@ export class FsPopoverService {
           originY: 'bottom',
           overlayX: 'start',
           overlayY: 'top',
-          offsetY: 15,
+          offsetY: 0,
         },
         {
           originX: 'start',
           originY: 'top',
           overlayX: 'start',
           overlayY: 'bottom',
-          offsetY: -15,
+          offsetY: 0,
         }
       ]);
   }

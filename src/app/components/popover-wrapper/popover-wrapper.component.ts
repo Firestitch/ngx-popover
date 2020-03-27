@@ -4,6 +4,7 @@ import {
   ComponentRef, ElementRef,
   EmbeddedViewRef,
   ViewChild,
+  HostBinding,
 } from '@angular/core';
 import {
   BasePortalOutlet,
@@ -15,17 +16,18 @@ import {
   selector: 'fs-popover-wrapper',
   templateUrl: 'popover-wrapper.component.html',
   styleUrls: [ 'popover-wrapper.component.scss' ],
-  host: {
-    'class': 'mat-elevation-z4 popover-wrapper',
-  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FsPopoverWrapperComponent extends BasePortalOutlet {
 
   @ViewChild(CdkPortalOutlet, { static: true }) _portalOutlet: CdkPortalOutlet;
+  @HostBinding('class') class;
+
+  private _wrapperClass;
 
   constructor(private _el: ElementRef) {
     super();
+    this._updateClass();
   }
 
   public set width(value: number) {
@@ -34,6 +36,11 @@ export class FsPopoverWrapperComponent extends BasePortalOutlet {
     } else {
       this._el.nativeElement.style.width = void 0;
     }
+  }
+
+  public set wrapperClass(value: string) {
+    this._wrapperClass = value;
+    this._updateClass();
   }
 
   /**
@@ -63,4 +70,7 @@ export class FsPopoverWrapperComponent extends BasePortalOutlet {
     return this._portalOutlet.attachComponentPortal(portal);
   }
 
+  private _updateClass() {
+    this.class = ['popover-wrapper', this._wrapperClass].filter(Boolean).join(' ');
+  }
 }
