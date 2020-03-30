@@ -1,4 +1,6 @@
-<ng-template #tmpl1>
+<ng-template #tmpl1 let-account="account">
+  Data: {{ account | json }}
+
   <app-popover-content></app-popover-content>
 </ng-template>
 
@@ -7,7 +9,7 @@
 </ng-template>
 
 <div fxLayout="row" fxLayoutGap="20px">
-  <fs-popover [template]="tmpl1" wrapperClass="wrapper">
+  <fs-popover [template]="tmpl1" [data]="data" wrapperClass="wrapper">
     <button mat-raised-button color="primary">MouseOver for Popover</button>
   </fs-popover>
 

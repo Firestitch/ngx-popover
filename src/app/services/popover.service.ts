@@ -29,7 +29,13 @@ export class FsPopoverService {
     return this._containerRef.location.nativeElement;
   }
 
-  public openPopover(el: ElementRef, template: TemplateRef<any>, width?: number, wrapperClass?: string) {
+  public openPopover(
+    el: ElementRef,
+    template: TemplateRef<any>,
+    data: any,
+    width?: number,
+    wrapperClass?: string,
+  ) {
 
     if (this._opened) {
       return;
@@ -37,7 +43,7 @@ export class FsPopoverService {
 
     this._opened = true;
     this._overlayRef = this._createOverlay(el);
-    const templatePortal = this._createTempatePortal(template);
+    const templatePortal = this._createTempatePortal(template, data);
     this._containerRef = this._openPortalPreview(FsPopoverWrapperComponent, this._overlayRef);
 
     this._containerRef.instance.attachTemplatePortal(templatePortal);
@@ -77,8 +83,8 @@ export class FsPopoverService {
     return this._overlay.create(overlayConfig);
   }
 
-  private _createTempatePortal(template: TemplateRef<any>) {
-    return new TemplatePortal(template, void 0);
+  private _createTempatePortal(template: TemplateRef<any>, data: any) {
+    return new TemplatePortal(template, void 0, data);
   }
 
   private _createPopupPositionStrategy(el: ElementRef): PositionStrategy {

@@ -12,6 +12,12 @@ export class KitchenSinkComponent {
 
   public config = {};
 
+  public data = {
+    account: {
+      name: 'John'
+    }
+  };
+
   constructor(private exampleComponent: FsExampleComponent,
               private message: FsMessage) {
     exampleComponent.setConfigureComponent(KitchenSinkConfigureComponent, { config: this.config });

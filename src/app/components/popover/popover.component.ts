@@ -1,7 +1,11 @@
 import {
   ChangeDetectionStrategy,
-  Component, ElementRef,
-  Input, NgZone, OnDestroy, OnInit,
+  Component,
+  ElementRef,
+  Input,
+  NgZone,
+  OnDestroy,
+  OnInit,
   TemplateRef,
 } from '@angular/core';
 import { fromEvent, Subject } from 'rxjs';
@@ -24,6 +28,9 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
 
   @Input()
   public template: TemplateRef<any>;
+
+  @Input()
+  public data: any;
 
   @Input()
   public leaveDelay = 100;
@@ -96,7 +103,13 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
     this._hostBounds = this._elRef.nativeElement.getBoundingClientRect();
 
     this._ngZone.run(() => {
-      this._popoverService.openPopover(this._elRef, this.template, this.width, this.wrapperClass);
+      this._popoverService.openPopover(
+        this._elRef,
+        this.template,
+        this.data,
+        this.width,
+        this.wrapperClass
+      );
     });
   }
 
