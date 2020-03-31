@@ -84,7 +84,7 @@ export class FsPopoverService {
   }
 
   private _createTempatePortal(template: TemplateRef<any>, data: any) {
-    return new TemplatePortal(template, void 0, data);
+    return new TemplatePortal(template, void 0, { data: data });
   }
 
   private _createPopupPositionStrategy(el: ElementRef): PositionStrategy {

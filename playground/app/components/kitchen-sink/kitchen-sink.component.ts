@@ -12,10 +12,9 @@ export class KitchenSinkComponent {
 
   public config = {};
 
-  public data = {
-    account: {
-      name: 'John'
-    }
+  public account = {
+    name: 'John',
+    email: 'email@email.com'
   };
 
   constructor(private exampleComponent: FsExampleComponent,

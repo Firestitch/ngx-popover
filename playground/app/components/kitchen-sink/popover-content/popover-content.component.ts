@@ -1,10 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-popover-content',
   templateUrl: './popover-content.component.html',
 })
 export class PopoverContentComponent {
+
+  @Input() data;
+
   public loaded = false;
 
   constructor() {
