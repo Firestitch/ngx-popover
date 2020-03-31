@@ -33,7 +33,7 @@ export class FsPopoverService {
     el: ElementRef,
     template: TemplateRef<any>,
     data: any,
-    width?: number,
+    maxWidth?: number,
     wrapperClass?: string,
   ) {
 
@@ -47,7 +47,7 @@ export class FsPopoverService {
     this._containerRef = this._openPortalPreview(FsPopoverWrapperComponent, this._overlayRef);
 
     this._containerRef.instance.attachTemplatePortal(templatePortal);
-    this._containerRef.instance.width = width;
+    this._containerRef.instance.maxWidth = maxWidth;
     this._containerRef.instance.wrapperClass = wrapperClass;
   }
 

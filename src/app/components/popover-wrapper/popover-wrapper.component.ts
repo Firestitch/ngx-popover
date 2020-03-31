@@ -30,12 +30,8 @@ export class FsPopoverWrapperComponent extends BasePortalOutlet {
     this._updateClass();
   }
 
-  public set width(value: number) {
-    if (value) {
-      this._el.nativeElement.style.width = value + 'px';
-    } else {
-      this._el.nativeElement.style.width = void 0;
-    }
+  public set maxWidth(value: number) {
+    this._el.nativeElement.style.maxWidth = value ? value + 'px' : void 0;
   }
 
   public set wrapperClass(value: string) {

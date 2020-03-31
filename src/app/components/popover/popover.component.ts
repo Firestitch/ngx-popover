@@ -36,7 +36,7 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
   public leaveDelay = 100;
 
   @Input()
-  public width = 300;
+  public maxWidth;
 
   @Input()
   public wrapperClass;
@@ -107,7 +107,7 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
         this._elRef,
         this.template,
         this.data,
-        this.width,
+        this.maxWidth,
         this.wrapperClass
       );
     });
