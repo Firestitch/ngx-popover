@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { FsPopoverRef } from '@firestitch/popover';
 
 @Component({
   selector: 'app-popover-content',
@@ -7,12 +8,17 @@ import { Component, Input } from '@angular/core';
 export class PopoverContentComponent {
 
   @Input() data;
+  @Input() popover: FsPopoverRef;
 
   public loaded = false;
 
   constructor() {
     setTimeout(() => {
-      this.loaded = true
-    }, 300);
+      this.popover.show();
+
+      setTimeout(() => {
+        this.loaded = true
+      }, 500);
+    }, 1000);
   }
 }

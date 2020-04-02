@@ -36,10 +36,16 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
   public leaveDelay = 100;
 
   @Input()
-  public maxWidth;
+  public maxWidth: number;
 
   @Input()
-  public wrapperClass;
+  public wrapperClass: string;
+
+  @Input()
+  public autoShow = true;
+
+  @Input()
+  public diameter = 20;
 
   public closeTimer;
 
@@ -107,8 +113,12 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
         this._elRef,
         this.template,
         this.data,
-        this.maxWidth,
-        this.wrapperClass
+        {
+          maxWidth: this.maxWidth,
+          wrapperClass: this.wrapperClass,
+          autoShow: this.autoShow,
+          diameter: this.diameter,
+        }
       );
     });
   }

@@ -1,14 +1,22 @@
-:host {
+.wrapper {
   padding: 5px 0;
   animation: fadeIn ease 0.2s;
+
+  &.hidden {
+    display: none;
+  }
+
+  .popover-content {
+    background: #fff;
+    border-radius: 4px;
+    padding: 8px;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
 }
 
-.popover-content {
-  background: #fff;
-  border-radius: 4px;
-  padding: 8px;
-  box-sizing: border-box;
-  overflow: hidden;
+.loading-spinner {
+  position: fixed;
 }
 
 @keyframes fadeIn {

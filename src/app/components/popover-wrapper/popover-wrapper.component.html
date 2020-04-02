@@ -1,3 +1,9 @@
-<div class="mat-elevation-z4 popover-content">
-  <ng-template cdkPortalOutlet></ng-template>
+<div class="wrapper" [ngClass]="{ hidden: !(popoverRef.componentVisible$ | async) }">
+  <div class="mat-elevation-z4 popover-content">
+    <ng-template cdkPortalOutlet></ng-template>
+  </div>
+</div>
+
+<div class="loading-spinner" *ngIf="!(popoverRef.componentVisible$ | async)" #spinner>
+  <mat-spinner [diameter]="20"></mat-spinner>
 </div>
