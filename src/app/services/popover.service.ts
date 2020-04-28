@@ -1,136 +1,78 @@
-import { ComponentRef, ElementRef, Injectable, Injector, TemplateRef } from '@angular/core';
+import { ElementRef, Injectable, Injector, TemplateRef } from '@angular/core';
 
 import {
   ComponentType,
-  FlexibleConnectedPositionStrategy,
   Overlay,
-  OverlayConfig, OverlayRef,
-  PositionStrategy
+  OverlayRef,
 } from '@angular/cdk/overlay';
 
-import { ComponentPortal, PortalInjector, TemplatePortal } from '@angular/cdk/portal';
+import { ComponentPortal } from '@angular/cdk/portal';
 
 import { FsPopoverRef } from '../class/popover-ref';
 import { FsPopoverWrapperComponent } from '../components/popover-wrapper/popover-wrapper.component';
-import { IPopoverConfig } from '../interfaces/popover-config.interface';
+import { createOverlayRef } from '../helpers/create-overlay-ref';
+import { createInjector } from '../helpers/create-injector';
+import { createTempatePortal } from '../helpers/create-template-portal';
+import { IPopoverActiveElement } from '../interfaces/popover-config.interface';
 
 
 @Injectable()
 export class FsPopoverService {
 
-  private _overlayRef: OverlayRef;
-  private _popoverRef: FsPopoverRef;
-  private _containerRef: ComponentRef<any>;
-
-  private _containerPortal: ComponentPortal<FsPopoverWrapperComponent>;
-
-  private _opened = false;
+  private _activeElement: IPopoverActiveElement;
 
   constructor(
     private _injector: Injector,
     private _overlay: Overlay,
   ) {}
 
-  public get wrapperElement() {
-    return this._containerRef.location.nativeElement;
+  public get hasActivePopover() {
+    return !!this._activeElement;
   }
 
   public openPopover(
     el: ElementRef,
     template: TemplateRef<any>,
     data: any,
-    config?: IPopoverConfig,
+    popoverRef: FsPopoverRef,
   ) {
 
-    if (this._opened) {
-      return;
+    if (this._activeElement) {
+      this.close(this._activeElement.popoverRef)
     }
 
-    this._opened = true;
-    this._overlayRef = this._createOverlay(el);
-    this._popoverRef = new FsPopoverRef(config);
+    const overlayRef = createOverlayRef(el, this._overlay);
 
-    this._containerRef = this._openPortalPreview(FsPopoverWrapperComponent, this._overlayRef);
+    const containerRef = this._openPortalPreview(FsPopoverWrapperComponent, overlayRef, popoverRef);
+    const templatePortal = createTempatePortal(template, popoverRef, data);
+    containerRef.instance.attachTemplatePortal(templatePortal);
 
-    const templatePortal = this._createTempatePortal(template, data);
-    this._containerRef.instance.attachTemplatePortal(templatePortal);
+    this._activeElement = {
+      overlayRef,
+      popoverRef,
+    };
+
+    return containerRef.location.nativeElement;
   }
 
-  public close() {
-    this._containerRef.destroy();
-    this._overlayRef.detach();
-    this._opened = false;
+  public close(popoverRef = null) {
+    if (this._activeElement.popoverRef === popoverRef) {
+      this._activeElement.overlayRef.detach();
+      this._activeElement = void 0;
+    }
   }
 
   private _openPortalPreview(
     component: ComponentType<FsPopoverWrapperComponent>,
     overlayRef: OverlayRef,
+    popoverRef: FsPopoverRef,
   ) {
-    this._containerPortal = new ComponentPortal<FsPopoverWrapperComponent>(
+    const containerPortal = new ComponentPortal<FsPopoverWrapperComponent>(
       component,
       void 0,
-      this._createInjector(this._popoverRef),
+      createInjector(popoverRef, this._injector),
     );
 
-    return overlayRef.attach(this._containerPortal);
-  }
-
-  private _createOverlay(el: ElementRef, config = {}) {
-    config = Object.assign(
-      {
-        positionStrategy: this._createPopupPositionStrategy(el),
-        scrollStrategy: this._overlay.scrollStrategies.reposition(),
-        hasBackdrop: false
-      }, config);
-
-    const overlayConfig = new OverlayConfig(config);
-
-    return this._overlay.create(overlayConfig);
-  }
-
-  private _createTempatePortal(template: TemplateRef<any>, data: any) {
-    return new TemplatePortal(
-      template,
-      void 0,
-      { data: data, popover: this._popoverRef },
-    );
-  }
-
-  private _createPopupPositionStrategy(el: ElementRef): PositionStrategy {
-    return this._createBasePopupPositionStrategy(el)
-      .withPositions([
-        {
-          originX: 'start',
-          originY: 'bottom',
-          overlayX: 'start',
-          overlayY: 'top',
-          offsetY: 0,
-        },
-        {
-          originX: 'start',
-          originY: 'top',
-          overlayX: 'start',
-          overlayY: 'bottom',
-          offsetY: 0,
-        }
-      ]);
-  }
-
-
-  private _createBasePopupPositionStrategy(el: ElementRef): FlexibleConnectedPositionStrategy {
-    return this._overlay.position()
-      .flexibleConnectedTo(el)
-      .withGrowAfterOpen(true)
-      .withFlexibleDimensions(false)
-      .withViewportMargin(8)
-      .withLockedPosition()
-  }
-
-  private _createInjector(popoverRef: FsPopoverRef) {
-    const injectionTokens = new WeakMap<any, any>([
-      [FsPopoverRef, popoverRef],
-    ]);
-
-    return new PortalInjector(this._injector, injectionTokens);
+    return overlayRef.attach(containerPortal);
   }
 }

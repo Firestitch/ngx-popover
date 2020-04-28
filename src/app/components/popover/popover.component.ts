@@ -13,15 +13,13 @@ import { filter, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 import { FsPopoverService } from '../../services/popover.service';
 import { pointInRect } from '../../helpers/point-in-rect';
+import { FsPopoverRef } from '../../class/popover-ref';
 
 
 @Component({
   selector: 'fs-popover',
   templateUrl: 'popover.component.html',
   styleUrls: [ 'popover.component.scss' ],
-  providers: [
-    FsPopoverService
-  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FsPopoverComponent implements OnInit, OnDestroy {
@@ -49,6 +47,8 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
 
   public closeTimer;
 
+  private _popoverRef: FsPopoverRef;
+  private _wrapperElement: Element;
   private _hostBounds: DOMRect;
   private _popoverClosed$ = new Subject<void>();
   private _destroy$ = new Subject<void>();
@@ -61,6 +61,13 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+    this._popoverRef = new FsPopoverRef({
+      maxWidth: this.maxWidth,
+      wrapperClass: this.wrapperClass,
+      autoShow: this.autoShow,
+      diameter: this.diameter,
+    });
+
     this._ngZone.runOutsideAngular(() => {
       this._listenMouseHostEnter();
     });
@@ -75,7 +82,9 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
     this._popoverClosed$.next();
 
     this._ngZone.run(() => {
-      this._popoverService.close();
+      if (this._popoverService.hasActivePopover) {
+        this._popoverService.close(this._popoverRef);
+      }
     });
   }
 
@@ -109,16 +118,11 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
     this._hostBounds = this._elRef.nativeElement.getBoundingClientRect();
 
     this._ngZone.run(() => {
-      this._popoverService.openPopover(
+      this._wrapperElement = this._popoverService.openPopover(
         this._elRef,
         this.template,
         this.data,
-        {
-          maxWidth: this.maxWidth,
-          wrapperClass: this.wrapperClass,
-          autoShow: this.autoShow,
-          diameter: this.diameter,
-        }
+        this._popoverRef,
       );
     });
   }
@@ -139,7 +143,7 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
   // Check if mouse left target or popover rects
   private _mouseLeftTheTargets(event: MouseEvent) {
     const hostBounds = this._hostBounds;
-    const popoverBounds = this._popoverService.wrapperElement.getBoundingClientRect();
+    const popoverBounds = this._wrapperElement.getBoundingClientRect();
 
     const pointInHostRect = pointInRect(
       hostBounds.x,
