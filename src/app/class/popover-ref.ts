@@ -1,3 +1,4 @@
+import { OverlayRef } from '@angular/cdk/overlay';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -7,6 +8,8 @@ import { IPopoverConfig } from '../interfaces/popover-config.interface';
 
 @Injectable()
 export class FsPopoverRef {
+
+  public overlayRef: OverlayRef;
 
   private readonly _autoShow$ = new BehaviorSubject<boolean>(true);
   private readonly _componentLoading$ = new BehaviorSubject<boolean>(true);
@@ -59,6 +62,10 @@ export class FsPopoverRef {
 
   public show() {
     this._componentLoading$.next(false);
+  }
+
+  public updatePosition() {
+    this.overlayRef.updatePosition();
   }
 
   private _init(config: IPopoverConfig) {

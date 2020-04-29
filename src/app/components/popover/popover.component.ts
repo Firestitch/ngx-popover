@@ -11,6 +11,7 @@ import {
 import { fromEvent, Subject } from 'rxjs';
 import { filter, switchMap, takeUntil, tap } from 'rxjs/operators';
 
+import { Position } from './../../enums/position';
 import { FsPopoverService } from '../../services/popover.service';
 import { pointInRect } from '../../helpers/point-in-rect';
 import { FsPopoverRef } from '../../class/popover-ref';
@@ -44,6 +45,9 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
 
   @Input()
   public diameter = 20;
+
+  @Input()
+  public position: Position = Position.South;
 
   public closeTimer;
 
@@ -123,6 +127,7 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
         this.template,
         this.data,
         this._popoverRef,
+        this.position
       );
     });
   }

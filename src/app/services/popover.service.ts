@@ -8,6 +8,7 @@ import {
 
 import { ComponentPortal } from '@angular/cdk/portal';
 
+import { Position } from './../enums/position';
 import { FsPopoverRef } from '../class/popover-ref';
 import { FsPopoverWrapperComponent } from '../components/popover-wrapper/popover-wrapper.component';
 import { createOverlayRef } from '../helpers/create-overlay-ref';
@@ -35,17 +36,19 @@ export class FsPopoverService {
     template: TemplateRef<any>,
     data: any,
     popoverRef: FsPopoverRef,
+    position: Position
   ) {
 
     if (this._activeElement) {
       this.close(this._activeElement.popoverRef)
     }
 
-    const overlayRef = createOverlayRef(el, this._overlay);
-
+    const overlayRef = createOverlayRef(el, this._overlay, position);
     const containerRef = this._openPortalPreview(FsPopoverWrapperComponent, overlayRef, popoverRef);
     const templatePortal = createTempatePortal(template, popoverRef, data);
+
     containerRef.instance.attachTemplatePortal(templatePortal);
+    popoverRef.overlayRef = overlayRef;
 
     this._activeElement = {
       overlayRef,

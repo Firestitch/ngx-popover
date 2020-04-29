@@ -10,12 +10,25 @@
   mollit anim id est laborum.
 </ng-template>
 
-<div fxLayout="row" fxLayoutGap="20px">
-  <fs-popover [template]="tmpl1" [data]="account" wrapperClass="wrapper" [autoShow]="false">
+<div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="20px" class="popovers">
+  <fs-popover [template]="tmpl1" [data]="account" wrapperClass="wrapper" [autoShow]="false" [position]="'south'">
     <button mat-raised-button color="primary">MouseOver for Popover</button>
   </fs-popover>
 
-  <fs-popover [template]="tmpl2" maxWidth="500">
+  <fs-popover [template]="tmpl2" maxWidth="500" [position]="position">
     <button mat-raised-button color="primary">MouseOver for Popover</button>
   </fs-popover>
 </div>
+
+<mat-form-field>
+  <mat-select
+    [(ngModel)]="position"
+    name="position"
+    placeholder="Position">
+      <mat-option
+        *ngFor="let item of positions"
+        [value]="item.value">
+          {{ item.name }}
+      </mat-option>
+  </mat-select>
+</mat-form-field>
