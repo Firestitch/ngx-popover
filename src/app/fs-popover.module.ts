@@ -21,9 +21,6 @@ import { FsPopoverService } from './services/popover.service';
   exports: [
     FsPopoverComponent,
   ],
-  providers: [
-    // FsComponentService,
-  ],
 })
 export class FsPopoverModule {
   static forRoot(): ModuleWithProviders<FsPopoverModule> {

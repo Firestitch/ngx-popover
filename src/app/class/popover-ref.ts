@@ -61,7 +61,17 @@ export class FsPopoverRef {
   }
 
   public show() {
-    this._componentLoading$.next(false);
+    setTimeout(() => {
+      this._componentLoading$.next(false);
+      setTimeout(() => {
+        this.updatePosition();
+      });
+    });
+  }
+
+  public close() {
+    this.overlayRef.detach();
+    this._componentLoading$.next(true);
   }
 
   public updatePosition() {
@@ -74,5 +84,4 @@ export class FsPopoverRef {
     this._diameter = config.diameter;
     this._autoShow$.next(config.autoShow);
   }
-
 }

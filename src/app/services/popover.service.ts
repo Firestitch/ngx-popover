@@ -58,9 +58,9 @@ export class FsPopoverService {
     return containerRef.location.nativeElement;
   }
 
-  public close(popoverRef = null) {
+  public close(popoverRef: FsPopoverRef = null) {
     if (this._activeElement.popoverRef === popoverRef) {
-      this._activeElement.overlayRef.detach();
+      popoverRef.close();
       this._activeElement = void 0;
     }
   }

@@ -14,16 +14,8 @@ export class PopoverContentComponent {
 
   constructor() {
     setTimeout(() => {
+      this.loaded = true;
       this.popover.show();
-
-      setTimeout(() => {
-
-        this.loaded = true;
-        setTimeout(() => {
-          this.popover.updatePosition();
-        });
-
-      }, 500);
-    }, 1000);
+    }, 500);
   }
 }

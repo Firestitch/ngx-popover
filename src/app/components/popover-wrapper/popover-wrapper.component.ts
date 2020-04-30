@@ -38,8 +38,9 @@ export class FsPopoverWrapperComponent extends BasePortalOutlet implements OnIni
 
   @HostBinding('class') class;
 
-  private _wrapperClass;
+  public hidden = false;
 
+  private _wrapperClass;
   private _destroy$ = new Subject<void>();
 
   constructor(
@@ -68,6 +69,7 @@ export class FsPopoverWrapperComponent extends BasePortalOutlet implements OnIni
       this._watchMousePosition();
     }
   }
+
 
   public ngOnDestroy() {
     this._destroy$.next();
