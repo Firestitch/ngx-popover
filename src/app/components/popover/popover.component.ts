@@ -6,9 +6,11 @@ import {
   NgZone,
   OnDestroy,
   OnInit,
+  Optional,
   TemplateRef,
 } from '@angular/core';
-import { fromEvent, Subject } from 'rxjs';
+import { NavigationEnd, Router } from '@angular/router';
+import { fromEvent, pipe, Subject } from 'rxjs';
 import { filter, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 import { Position } from './../../enums/position';
@@ -61,6 +63,7 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
     private _elRef: ElementRef,
     private _popoverService: FsPopoverService,
     private _ngZone: NgZone,
+    @Optional() private _router: Router,
   ) {
   }
 
@@ -75,6 +78,8 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
     this._ngZone.runOutsideAngular(() => {
       this._listenMouseHostEnter();
     });
+
+    this._listenRouteChange();
   }
 
   public ngOnDestroy() {
@@ -103,6 +108,21 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
       clearTimeout(this.closeTimer);
       this.closeTimer = void 0;
     }
+  }
+
+  private _listenRouteChange() {
+    this._router.events
+      .pipe(
+        filter((event) => {
+          return event instanceof NavigationEnd;
+        }),
+        pipe(
+          takeUntil(this._destroy$),
+        )
+      )
+      .subscribe(() => {
+        this._closePopover();
+      })
   }
 
   private _listenMouseHostEnter() {
