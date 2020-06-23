@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { fromEvent, pipe, Subject } from 'rxjs';
-import { filter, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { delay, filter, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 import { Position } from './../../enums/position';
 import { FsPopoverService } from '../../services/popover.service';
@@ -117,7 +117,10 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
           return event instanceof NavigationEnd;
         }),
         pipe(
-          takeUntil(this._destroy$),
+          takeUntil(
+            this._destroy$
+              .pipe(delay(200)),
+          ),
         )
       )
       .subscribe(() => {
