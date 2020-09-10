@@ -8,6 +8,7 @@ import {
   OnInit,
   Optional,
   TemplateRef,
+  HostBinding,
 } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { fromEvent, pipe, Subject } from 'rxjs';
@@ -46,7 +47,14 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
   public autoShow = true;
 
   @Input()
-  public diameter = 20;
+  public loadingDiameter = 20;
+
+  @Input()
+  public loading = true;
+
+  @Input()
+  @HostBinding('class.indication')
+  public indication = true;
 
   @Input()
   public position: Position = Position.South;
@@ -72,7 +80,8 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
       maxWidth: this.maxWidth,
       wrapperClass: this.wrapperClass,
       autoShow: this.autoShow,
-      diameter: this.diameter,
+      loadingDiameter: this.loadingDiameter,
+      loading: this.loading,
     });
 
     this._ngZone.runOutsideAngular(() => {

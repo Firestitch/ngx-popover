@@ -15,14 +15,19 @@ export class FsPopoverRef {
   private readonly _componentLoading$ = new BehaviorSubject<boolean>(true);
   private _maxWidth: number;
   private _wrapperClass: string;
-  private _diameter: number;
+  private _loadingDiameter: number;
+  private _loading: boolean;
 
   constructor(config: IPopoverConfig = {}) {
     this._init(config);
   }
 
-  public get diameter() {
-    return this._diameter;
+  public get loadingDiameter() {
+    return this._loadingDiameter;
+  }
+
+  public get loading() {
+    return this._loading;
   }
 
   public get autoShow$() {
@@ -81,7 +86,8 @@ export class FsPopoverRef {
   private _init(config: IPopoverConfig) {
     this._wrapperClass = config.wrapperClass;
     this._maxWidth = config.maxWidth;
-    this._diameter = config.diameter;
+    this._loading = config.loading;
+    this._loadingDiameter = config.loadingDiameter;
     this._autoShow$.next(config.autoShow);
   }
 }

@@ -5,3 +5,4 @@
 @import '../src/app/styles.scss';
 
 @include fs-drawer($mat-blue);
+@include fs-popover($mat-blue);

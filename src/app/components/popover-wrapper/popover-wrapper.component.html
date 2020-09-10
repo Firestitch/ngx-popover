@@ -4,6 +4,9 @@
   </div>
 </div>
 
-<div class="loading-spinner" *ngIf="!(popoverRef.componentVisible$ | async)" #spinner>
-  <mat-spinner [diameter]="20"></mat-spinner>
+<div class="loading-spinner"
+  #spinner
+  *ngIf="popoverRef.loading && !(popoverRef.componentVisible$ | async)"
+  [style.marginLeft]="(popoverRef.loadingDiameter * -.25) +'px'">
+    <mat-spinner [diameter]="popoverRef.loadingDiameter"></mat-spinner>
 </div>
