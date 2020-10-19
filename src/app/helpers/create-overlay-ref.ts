@@ -7,7 +7,7 @@ import { Position } from './../enums/position';
 export function createOverlayRef(el: ElementRef, overlay: Overlay, position: Position) {
   const config = {
     positionStrategy: createPopupPositionStrategy(el, overlay, position),
-    scrollStrategy: overlay.scrollStrategies.close(),
+    scrollStrategy: overlay.scrollStrategies.reposition(),
     hasBackdrop: false
   };
 
