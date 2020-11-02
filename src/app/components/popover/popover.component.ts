@@ -147,7 +147,11 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
   private _listenMouseHostClick() {
     fromEvent(this._elRef.nativeElement, 'click', { passive: true })
       .pipe(
-        tap(() => this._openPopover()),
+        tap((e: MouseEvent) => {
+          e.stopPropagation();
+
+          this._openPopover();
+        }),
         switchMap(() => this._listenMouseHostLeave()),
         takeUntil(this._destroy$),
       )
