@@ -59,6 +59,9 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
   @Input()
   public position: Position = Position.South;
 
+  @Input()
+  public trigger: 'click' | 'mouseover' = 'mouseover';
+
   public closeTimer;
 
   private _popoverRef: FsPopoverRef;
@@ -85,7 +88,11 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
     });
 
     this._ngZone.runOutsideAngular(() => {
-      this._listenMouseHostEnter();
+      if (this.trigger === 'click') {
+        this._listenMouseHostClick();
+      } else {
+        this._listenMouseHostEnter();
+      }
     });
 
     this._listenRouteChange();
@@ -135,6 +142,18 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this._closePopover();
       })
+  }
+
+  private _listenMouseHostClick() {
+    fromEvent(this._elRef.nativeElement, 'click', { passive: true })
+      .pipe(
+        tap(() => this._openPopover()),
+        switchMap(() => this._listenMouseHostLeave()),
+        takeUntil(this._destroy$),
+      )
+      .subscribe(() => {
+        this._startCloseTimer();
+      });
   }
 
   private _listenMouseHostEnter() {
