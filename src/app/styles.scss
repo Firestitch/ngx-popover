@@ -1,8 +1,10 @@
+@import '~@firestitch/style/styles';
+
 @mixin fs-popover($theme) {
 
   $primary: mat-palette($theme);
 
   fs-popover.indication {
-    border-bottom: 1px dashed rgba(mat-color($primary),.3);
+    border-bottom: 1px dashed fs-style-color-rgb($primary, .3);
   }
 }
