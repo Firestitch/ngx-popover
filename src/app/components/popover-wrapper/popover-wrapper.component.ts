@@ -18,7 +18,7 @@ import {
 } from '@angular/cdk/portal';
 
 import { fromEvent, Subject } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
+import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 
 import { FsPopoverRef } from '../../class/popover-ref';
 
@@ -41,6 +41,9 @@ export class FsPopoverWrapperComponent extends BasePortalOutlet implements OnIni
   public hidden = false;
 
   private _wrapperClass;
+  private _contentChangesObserver: MutationObserver;
+  private _updatePosition = new Subject<void>();
+
   private _destroy$ = new Subject<void>();
 
   constructor(
@@ -68,10 +71,14 @@ export class FsPopoverWrapperComponent extends BasePortalOutlet implements OnIni
     if (!this.popoverRef.autoShow && this.popoverRef.componentLoading) {
       this._watchMousePosition();
     }
+
+    this._observeContentChanges();
+    this._listenUpdatePositionRequests();
   }
 
 
   public ngOnDestroy() {
+    this._contentChangesObserver.disconnect();
     this._destroy$.next();
     this._destroy$.complete();
   }
@@ -103,6 +110,10 @@ export class FsPopoverWrapperComponent extends BasePortalOutlet implements OnIni
     return this._portalOutlet.attachComponentPortal(portal);
   }
 
+  public updatePosition() {
+    this._updatePosition.next();
+  }
+
   private _watchMousePosition() {
     const componentVisibilityChange$ = this.popoverRef.componentVisible$
       .pipe(
@@ -124,5 +135,29 @@ export class FsPopoverWrapperComponent extends BasePortalOutlet implements OnIni
 
   private _updateClass() {
     this.class = ['popover-wrapper', this._wrapperClass].filter(Boolean).join(' ');
+  }
+
+  private _observeContentChanges() {
+    const config = {
+      childList: true,
+      subtree: true
+    };
+
+    this._contentChangesObserver = new MutationObserver(() => {
+      this.updatePosition();
+    });
+
+    this._contentChangesObserver.observe(this._el.nativeElement, config);
+  }
+
+  private _listenUpdatePositionRequests() {
+    this._updatePosition
+      .pipe(
+        debounceTime(50),
+        takeUntil(this._destroy$),
+      )
+      .subscribe(() => {
+        this.popoverRef.updatePosition();
+      })
   }
 }

@@ -48,6 +48,5 @@ function createBasePopupPositionStrategy(el: ElementRef, overlay: Overlay): Flex
     .flexibleConnectedTo(el)
     .withGrowAfterOpen(true)
     .withFlexibleDimensions(false)
-    .withViewportMargin(8)
-    .withLockedPosition();
+    .withViewportMargin(4);
 }
