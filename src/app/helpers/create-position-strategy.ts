@@ -5,28 +5,42 @@ import { Position } from './../enums/position';
 
 export function createPopupPositionStrategy(el: ElementRef, overlay: Overlay, position: Position): PositionStrategy {
 
-  let overlayY: any = 'center';
-  let overlayX: any = 'center';
+  let overlayX: 'start' | 'center' | 'end' = 'center';
+  let overlayY: 'top' | 'center' | 'bottom' = 'center';
 
-  let originY: any = 'center';
-  let originX: any = 'center';
+  let originX: 'start' | 'center' | 'end' = 'center';
+  let originY: 'top' | 'center' | 'bottom' = 'center';
 
-  switch (position) {
+  let offsetX = 0;
+  let offsetY = 0;
+
+  let panelClass: string[] = [];
+
+
+    switch (position) {
     case Position.North:
       originY = 'top';
       overlayY = 'bottom';
+      panelClass = ['fs-popover-top'];
+      offsetY = -8;
       break;
     case Position.South:
       originY = 'bottom';
       overlayY = 'top';
+      panelClass = ['fs-popover-bottom'];
+      offsetY = 8;
       break;
     case Position.East:
       overlayX = 'start';
       originX = 'end';
+      panelClass = ['fs-popover-left'];
+      offsetX = 8;
       break;
     case Position.West:
       overlayX = 'end';
       originX = 'start';
+      panelClass = ['fs-popover-right'];
+      offsetX = -8;
       break;
   }
 
@@ -37,7 +51,9 @@ export function createPopupPositionStrategy(el: ElementRef, overlay: Overlay, po
         originY: originY,
         overlayX: overlayX,
         overlayY: overlayY,
-        offsetY: 0,
+        offsetX: offsetX,
+        offsetY: offsetY,
+        panelClass: panelClass,
       }
     ]);
 }
