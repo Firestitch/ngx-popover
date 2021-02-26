@@ -1,5 +1,9 @@
+$arrow-size: 10px;
+$arrow-offset: -4px;
+$dark-arrow-color: #c9c9c9;
+
 .wrapper {
-  padding: 5px;
+  padding: 6px;
   animation: fadeIn ease 0.2s;
 
   &.hidden {
@@ -12,6 +16,88 @@
     padding: 8px;
     box-sizing: border-box;
     overflow: hidden;
+  }
+
+  .fs-popover-arrow {
+    width: 0;
+    height: 0;
+    font-size: 0;
+    line-height: 0;
+    position: absolute;
+    z-index: 200;
+    z-index: 1;
+
+    &.dark {
+      z-index: 0;
+    }
+  }
+}
+
+::ng-deep {
+  .fs-popover-top, .fs-popover-bottom {
+    .fs-popover-arrow {
+      border-left: $arrow-size solid transparent;
+      border-right: $arrow-size solid transparent;
+    }
+  }
+
+  .fs-popover-left, .fs-popover-right {
+    .fs-popover-arrow {
+      border-top: $arrow-size solid transparent;
+      border-bottom: $arrow-size solid transparent;
+    }
+  }
+
+  .fs-popover-top {
+    .fs-popover-arrow {
+      bottom: $arrow-offset;
+      left: calc(50% - #{$arrow-size});
+      border-top: $arrow-size solid #fff;
+
+      &.dark {
+        border-top-color: $dark-arrow-color;
+      }
+    }
+  }
+
+  .fs-popover-bottom {
+    .fs-popover-arrow {
+      top: $arrow-offset;
+      left: calc(50% - #{$arrow-size});
+      border-bottom: $arrow-size solid #fff;
+
+      &.dark {
+        border-bottom-color: $dark-arrow-color;
+      }
+    }
+  }
+
+  .fs-popover-left {
+    .fs-popover-arrow {
+      left: $arrow-offset;
+      top: calc(50% - #{$arrow-size});
+      border-right: $arrow-size solid #fff;
+
+      &.dark {
+        border-right-color: $dark-arrow-color;
+      }
+    }
+  }
+
+  .fs-popover-right {
+    .fs-popover-arrow {
+      right: $arrow-offset;
+      top: calc(50% - #{$arrow-size});
+      border-left: $arrow-size solid #fff;
+
+      &.dark {
+        border-left-color: $dark-arrow-color;
+      }
+    }
+  }
+
+  fs-popover.indication {
+    border-bottom: 1px dashed #ccc;
   }
 }
 
@@ -28,3 +114,4 @@
     opacity:1;
   }
 }
+
