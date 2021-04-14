@@ -1,4 +1,9 @@
-<div class="wrapper" [ngClass]="{ hidden: !(popoverRef.componentVisible$ | async) }">
+<div class="wrapper" [ngClass]="{
+  'theme-dark' : popoverRef.theme === 'dark',
+  'size-tiny': popoverRef.size === 'tiny',
+  'size-small': popoverRef.size === 'small',
+  'hidden': !(popoverRef.componentVisible$ | async)
+  }">
   <div class="mat-elevation-z4 popover-content">
     <ng-template cdkPortalOutlet></ng-template>
   </div>

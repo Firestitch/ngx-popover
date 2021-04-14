@@ -7,6 +7,8 @@ export interface IPopoverConfig {
   autoShow?: boolean;
   loadingDiameter?: number;
   loading?: boolean;
+  theme?: string;
+  size?: string;
 }
 
 export interface IPopoverActiveElement {

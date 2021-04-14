@@ -17,6 +17,8 @@ export class FsPopoverRef {
   private _wrapperClass: string;
   private _loadingDiameter: number;
   private _loading: boolean;
+  private _theme: string;
+  private _size: string;
 
   constructor(config: IPopoverConfig = {}) {
     this._init(config);
@@ -24,6 +26,14 @@ export class FsPopoverRef {
 
   public get loadingDiameter() {
     return this._loadingDiameter;
+  }
+
+  public get size() {
+    return this._size;
+  }
+
+  public get theme() {
+    return this._theme;
   }
 
   public get loading() {
@@ -88,6 +98,8 @@ export class FsPopoverRef {
     this._maxWidth = config.maxWidth;
     this._loading = config.loading;
     this._loadingDiameter = config.loadingDiameter;
+    this._size = config.size;
+    this._theme = config.theme;
     this._autoShow$.next(config.autoShow);
   }
 }

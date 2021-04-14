@@ -1,6 +1,7 @@
 $arrow-size: 10px;
 $arrow-offset: -4px;
 $dark-arrow-color: #c9c9c9;
+$dark-theme-color: #707070;
 
 .wrapper {
   padding: 6px;
@@ -14,8 +15,22 @@ $dark-arrow-color: #c9c9c9;
     background: #fff;
     border-radius: 4px;
     padding: 8px;
+    color: #1b1b1b;
     box-sizing: border-box;
     overflow: hidden;
+  }
+
+  &.theme-dark .popover-content {
+    background-color: $dark-theme-color;
+    color: #fff;
+  }
+
+  &.size-small .popover-content {
+    font-size: 80%;
+  }
+
+  &.size-tiny .popover-content {
+    font-size: 75%;
   }
 
   .fs-popover-arrow {
@@ -34,6 +49,7 @@ $dark-arrow-color: #c9c9c9;
 }
 
 ::ng-deep {
+
   .fs-popover-top, .fs-popover-bottom {
     .fs-popover-arrow {
       border-left: $arrow-size solid transparent;
@@ -96,8 +112,28 @@ $dark-arrow-color: #c9c9c9;
     }
   }
 
-  fs-popover.indication {
-    border-bottom: 1px dashed #ccc;
+
+  .fs-popover-bottom .wrapper.theme-dark {
+    .fs-popover-arrow {
+      border-bottom-color: $dark-theme-color;
+    }
+  }
+
+  .fs-popover-left .wrapper.theme-dark {
+    .fs-popover-arrow {
+      border-right-color: $dark-theme-color;
+    }
+  }
+  .fs-popover-right .wrapper.theme-dark {
+    .fs-popover-arrow {
+      border-left-color: $dark-theme-color;
+    }
+  }
+
+  .fs-popover-top .wrapper.theme-dark {
+    .fs-popover-arrow {
+      border-top-color: $dark-theme-color;
+    }
   }
 }
 

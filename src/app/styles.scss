@@ -4,8 +4,8 @@
 
   $primary: mat-palette($theme);
 
-  fs-popover.indication {
-    border-bottom-color: fs-style-color-rgb($primary, .3) !important;
+  fs-popover.indication .line {
+    border-color: mat-color($primary) !important;
   }
 }
 

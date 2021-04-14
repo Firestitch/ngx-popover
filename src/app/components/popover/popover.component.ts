@@ -11,8 +11,8 @@ import {
   HostBinding,
 } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { fromEvent, pipe, Subject } from 'rxjs';
-import { delay, filter, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { fromEvent, pipe, Subject, of, timer } from 'rxjs';
+import { delay, filter, skipWhile, switchMap, take, takeUntil, tap, timeout } from 'rxjs/operators';
 
 import { Position } from './../../enums/position';
 import { FsPopoverService } from '../../services/popover.service';
@@ -38,7 +38,10 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
   public leaveDelay = 100;
 
   @Input()
-  public maxWidth: number;
+  public showDelay = 0;
+
+  @Input()
+  public maxWidth = 250;
 
   @Input()
   public wrapperClass: string;
@@ -60,6 +63,12 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
   public position: Position = Position.South;
 
   @Input()
+  public theme: 'light' | 'dark' = 'light';
+
+  @Input()
+  public size: 'tiny' | 'small' | 'normal' = 'normal';
+
+  @Input()
   public trigger: 'click' | 'mouseover' = 'mouseover';
 
   public closeTimer;
@@ -67,6 +76,7 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
   private _popoverRef: FsPopoverRef;
   private _wrapperElement: Element;
   private _hostBounds: DOMRect;
+  private _mouseLeave = false;
   private _popoverClosed$ = new Subject<void>();
   private _destroy$ = new Subject<void>();
 
@@ -85,6 +95,8 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
       autoShow: this.autoShow,
       loadingDiameter: this.loadingDiameter,
       loading: this.loading,
+      size: this.size,
+      theme: this.theme,
     });
 
     this._ngZone.runOutsideAngular(() => {
@@ -161,15 +173,35 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
   }
 
   private _listenMouseHostEnter() {
+    fromEvent(this._elRef.nativeElement, 'mouseleave', { passive: true })
+      .pipe(
+        takeUntil(this._destroy$),
+      )
+      .subscribe(() => {
+          this._mouseLeave = true;
+      });
+
     fromEvent(this._elRef.nativeElement, 'mouseenter', { passive: true })
       .pipe(
+        tap(() => {
+          this._mouseLeave = false;
+        }),
+        switchMap(() =>
+          timer(this.showDelay, this.showDelay)
+            .pipe(
+              take(1),
+            )
+        ),
+        filter(() => {
+          return !this._mouseLeave;
+        }),
         tap(() => this._openPopover()),
         switchMap(() => this._listenMouseHostLeave()),
         takeUntil(this._destroy$),
       )
       .subscribe(() => {
         this._startCloseTimer();
-      })
+      });
   }
 
   private _openPopover() {

@@ -10,16 +10,22 @@
   mollit anim id est laborum.
 </ng-template>
 
-<div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="20px" class="popovers">
+<div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="20px" class="popovers">
   <fs-popover [template]="tmpl1" [data]="account" wrapperClass="wrapper" [autoShow]="false" [position]="position" [indication]="false">
     <button mat-raised-button color="primary">MouseOver for Popover</button>
   </fs-popover>
 
-  <div>
-    <fs-popover [template]="tmpl2" maxWidth="500" [position]="position">
-      MouseOver for Popover
+    <fs-popover [template]="tmpl2" maxWidth="500" size="small" [position]="position" showDelay="1000">
+      MouseOver for Popover with 1000ms delay
     </fs-popover>
-  </div>
+
+    <fs-popover [template]="tmpl2" theme="dark"  size="small" [position]="position">
+      Dark Theme Popover
+    </fs-popover>
+
+    <fs-popover [template]="tmpl2" theme="dark" size="tiny" [position]="position">
+      Tiny Dark Theme Popover
+    </fs-popover>
 </div>
 
 <mat-form-field>

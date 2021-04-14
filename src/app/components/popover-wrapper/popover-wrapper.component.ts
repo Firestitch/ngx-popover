@@ -31,7 +31,8 @@ import { FsPopoverRef } from '../../class/popover-ref';
 })
 export class FsPopoverWrapperComponent extends BasePortalOutlet implements OnInit, OnDestroy {
 
-  @ViewChild(CdkPortalOutlet, { static: true }) _portalOutlet: CdkPortalOutlet;
+  @ViewChild(CdkPortalOutlet, { static: true })
+  public _portalOutlet: CdkPortalOutlet;
 
   @ViewChild('spinner')
   public spinner;
