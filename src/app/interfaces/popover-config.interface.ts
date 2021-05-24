@@ -5,6 +5,7 @@ export interface IPopoverConfig {
   maxWidth?: number;
   wrapperClass?: string;
   autoShow?: boolean;
+  autoClose?: boolean;
   loadingDiameter?: number;
   loading?: boolean;
   theme?: string;

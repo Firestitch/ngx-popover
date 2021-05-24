@@ -12,6 +12,7 @@ export class FsPopoverRef {
   public overlayRef: OverlayRef;
 
   private readonly _autoShow$ = new BehaviorSubject<boolean>(true);
+  private readonly _autoClose$ = new BehaviorSubject<boolean>(true);
   private readonly _componentLoading$ = new BehaviorSubject<boolean>(true);
   private _maxWidth: number;
   private _wrapperClass: string;
@@ -46,6 +47,22 @@ export class FsPopoverRef {
 
   public get autoShow() {
     return this._autoShow$.getValue();
+  }
+
+  public set autoShow(value: boolean) {
+    this._autoShow$.next(value);
+  }
+
+  public get autoClose$() {
+    return this._autoClose$.asObservable();
+  }
+
+  public get autoClose() {
+    return this._autoClose$.getValue();
+  }
+
+  public set autoClose(value: boolean) {
+    this._autoClose$.next(value);
   }
 
   public get componentVisible$() {
@@ -101,5 +118,6 @@ export class FsPopoverRef {
     this._size = config.size;
     this._theme = config.theme;
     this._autoShow$.next(config.autoShow);
+    this._autoClose$.next(config.autoClose);
   }
 }
