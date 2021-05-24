@@ -1,0 +1,20 @@
+<div *fsSkeleton="loaded; pattern: [100, 100, 100]">
+  <ng-container *ngIf="data">
+    <div>{{data.name}}</div>
+    <small>{{data.email}}</small>
+
+    <a target="_blank"
+      class="edit"
+      mat-icon-button>
+      <mat-icon>edit</mat-icon>
+    </a>
+    <fs-menu class="menu" (opened)="menuOpened()" (closed)="menuClosed()">
+      <ng-template fs-menu-item>
+        Details
+      </ng-template>
+      <ng-template fs-menu-item>
+        Calendar
+      </ng-template>
+    </fs-menu>
+  </ng-container>
+</div>

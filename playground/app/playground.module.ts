@@ -19,6 +19,8 @@ import {
 import { AppComponent } from './app.component';
 import { KitchenSinkConfigureComponent } from './components/kitchen-sink-configure';
 import { PopoverContentComponent } from './components/kitchen-sink/popover-content/popover-content.component';
+import { PopoverContentWithMenuComponent } from './components/kitchen-sink/popover-content-with-menu/popover-content-with-menu.component';
+import { FsMenuModule } from '@firestitch/menu';
 
 const routes: Routes = [
   { path: '', component: ExamplesComponent },
@@ -38,6 +40,7 @@ const routes: Routes = [
     FsSkeletonModule,
     ToastrModule.forRoot({ preventDuplicates: true }),
     RouterModule.forRoot(routes),
+    FsMenuModule,
   ],
   declarations: [
     AppComponent,
@@ -45,6 +48,7 @@ const routes: Routes = [
     KitchenSinkComponent,
     KitchenSinkConfigureComponent,
     PopoverContentComponent,
+    PopoverContentWithMenuComponent,
   ],
 })
 export class PlaygroundModule {
