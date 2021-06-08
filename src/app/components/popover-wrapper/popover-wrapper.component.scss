@@ -1,6 +1,6 @@
 $arrow-size: 10px;
-$arrow-offset: -4px;
-$dark-arrow-color: #c9c9c9;
+$arrow-offset: -3;
+$dark-arrow-color: rgb(223 223 223 / 25%);
 $dark-theme-color: #707070;
 
 .wrapper {
@@ -66,48 +66,52 @@ $dark-theme-color: #707070;
 
   .fs-popover-top {
     .fs-popover-arrow {
-      bottom: $arrow-offset;
+      bottom: $arrow-offset + px;
       left: calc(50% - #{$arrow-size});
       border-top: $arrow-size solid #fff;
 
       &.dark {
         border-top-color: $dark-arrow-color;
+        bottom: $arrow-offset - 1px;
       }
     }
   }
 
   .fs-popover-bottom {
     .fs-popover-arrow {
-      top: $arrow-offset;
+      top: $arrow-offset + px;
       left: calc(50% - #{$arrow-size});
       border-bottom: $arrow-size solid #fff;
 
       &.dark {
         border-bottom-color: $dark-arrow-color;
+        top: $arrow-offset - 1px;
       }
     }
   }
 
   .fs-popover-left {
     .fs-popover-arrow {
-      left: $arrow-offset;
+      left: $arrow-offset + px;
       top: calc(50% - #{$arrow-size});
       border-right: $arrow-size solid #fff;
 
       &.dark {
         border-right-color: $dark-arrow-color;
+        left: $arrow-offset - 1px;
       }
     }
   }
 
   .fs-popover-right {
     .fs-popover-arrow {
-      right: $arrow-offset;
+      right: $arrow-offset + px;
       top: calc(50% - #{$arrow-size});
       border-left: $arrow-size solid #fff;
 
       &.dark {
         border-left-color: $dark-arrow-color;
+        right: $arrow-offset - 1px;
       }
     }
   }
