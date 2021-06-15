@@ -82,9 +82,6 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
   @Input()
   public trigger: 'click' | 'mouseover' = 'mouseover';
 
-  private _openTimer$ = timer(this.showDelay);
-  private _closeTimer$ = timer(this.leaveDelay);
-
   private _popoverRef: FsPopoverRef;
   private _wrapperElement: Element;
   private _hostBounds: DOMRect;
@@ -97,6 +94,14 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
     private _ngZone: NgZone,
     @Optional() private _router: Router,
   ) {
+  }
+
+  public get openTimer$(): Observable<number> {
+    return timer(this.showDelay);
+  }
+
+  public get closeTimer$(): Observable<number> {
+    return timer(this.leaveDelay);
   }
 
   public ngOnInit() {
@@ -166,7 +171,7 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
           this._openPopover();
         }),
         switchMap(() => this._listenMouseHostLeave$()),
-        switchMap(() => this._closeTimer$),
+        switchMap(() => this.closeTimer$),
         takeUntil(this._destroy$),
       )
       .subscribe(() => {
@@ -184,10 +189,10 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
         filter(() => {
           return !this._wrapperElement;
         }),
-        switchMap(() => this._openTimer$),
+        switchMap(() => this.openTimer$),
         tap(() => this._openPopover()),
         switchMap(() => this._listenMouseHostLeave$()),
-        switchMap(() => this._closeTimer$),
+        switchMap(() => this.closeTimer$),
         tap(() => this._closePopover()),
         takeUntil(this._destroy$),
       )
