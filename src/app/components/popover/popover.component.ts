@@ -17,6 +17,7 @@ import {
   debounceTime,
   delay,
   filter,
+  finalize,
   switchMap,
   takeUntil,
   tap,
@@ -194,6 +195,7 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
         switchMap(() => this._listenMouseHostLeave$()),
         switchMap(() => this.closeTimer$),
         tap(() => this._closePopover()),
+        finalize(() => this._closePopover()),
         takeUntil(this._destroy$),
       )
       .subscribe();
