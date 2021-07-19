@@ -2,7 +2,7 @@
   "name": "@firestitch/popover",
   "title": "Popover",
   "description": "@firestitch/popover",
-  "version": "9.4.9",
+  "version": "9.4.11",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/ngx-package"
@@ -42,6 +42,7 @@
     "@angular/platform-browser-dynamic": "^9.0.7",
     "@angular/router": "^9.0.7",
     "@compodoc/compodoc": "^1.1.11",
+    "@firestitch/common": "^8.0.8",
     "@firestitch/drawer": "^8.2.0",
     "@firestitch/example": "^9.0.0",
     "@firestitch/iframe": "^8.0.0",
@@ -67,5 +68,8 @@
   },
   "engines": {
     "node": ">=6.0.0"
+  },
+  "peerDependencies": {
+    "@firestitch/common": ">=8.0.8"
   }
 }
