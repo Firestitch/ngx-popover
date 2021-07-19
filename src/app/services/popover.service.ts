@@ -21,6 +21,7 @@ import { IPopoverActiveElement } from '../interfaces/popover-config.interface';
 export class FsPopoverService {
 
   private _activeElement: IPopoverActiveElement;
+  private _activeElementGUID: string;
 
   constructor(
     private _injector: Injector,
@@ -29,6 +30,14 @@ export class FsPopoverService {
 
   public get hasActivePopover() {
     return !!this._activeElement;
+  }
+
+  public get activeElementGUID(): string {
+    return this._activeElementGUID;
+  }
+
+  public setActivePopoverGUID(value: string) {
+    this._activeElementGUID = value;
   }
 
   public openPopover(

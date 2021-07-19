@@ -23,6 +23,8 @@ import {
   tap,
 } from 'rxjs/operators';
 
+import { guid } from '@firestitch/common';
+
 import { Position } from './../../enums/position';
 import { FsPopoverService } from '../../services/popover.service';
 import { pointInRect } from '../../helpers/point-in-rect';
@@ -36,6 +38,8 @@ import { FsPopoverRef } from '../../class/popover-ref';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FsPopoverComponent implements OnInit, OnDestroy {
+
+  private _guid = guid('xxxxxxx');
 
   @Input()
   public template: TemplateRef<any>;
@@ -190,6 +194,9 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
         filter(() => {
           return !this._wrapperElement;
         }),
+        tap(() => {
+          this._popoverService.setActivePopoverGUID(this._guid);
+        }),
         switchMap(() => this.openTimer$),
         tap(() => this._openPopover()),
         switchMap(() => this._listenMouseHostLeave$()),
@@ -202,6 +209,10 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
   }
 
   private _openPopover(): void {
+    if (this._popoverService.activeElementGUID !== this._guid) {
+      return;
+    }
+
     this._hostBounds = this._elRef.nativeElement.getBoundingClientRect();
 
     this._ngZone.run(() => {
