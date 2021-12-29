@@ -2,7 +2,7 @@
   "name": "@firestitch/popover",
   "title": "Popover",
   "description": "@firestitch/popover",
-  "version": "9.4.11",
+  "version": "9.4.12",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/ngx-package"
