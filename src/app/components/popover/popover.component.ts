@@ -12,15 +12,19 @@ import {
 } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
-import { fromEvent, pipe, Subject, timer, Observable } from 'rxjs';
+import { fromEvent, pipe, Subject, timer, Observable, merge } from 'rxjs';
 import {
   debounceTime,
   delay,
+  distinctUntilChanged,
   filter,
   finalize,
+  mapTo,
+  startWith,
   switchMap,
   takeUntil,
   tap,
+  withLatestFrom,
 } from 'rxjs/operators';
 
 import { guid } from '@firestitch/common';
@@ -90,6 +94,11 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
   private _popoverRef: FsPopoverRef;
   private _wrapperElement: Element;
   private _hostBounds: DOMRect;
+
+  private _mouseEnter$ = fromEvent(this._elRef.nativeElement, 'mouseenter');
+  private _mouseMove$ = fromEvent(document, 'mousemove', { passive: true });
+  private _mouseLeave$ = fromEvent<MouseEvent>(this._elRef.nativeElement, 'mouseleave');
+
   private _popoverClosed$ = new Subject<void>();
   private _destroy$ = new Subject<void>();
 
@@ -185,11 +194,16 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
   }
 
   private _listenMouseHostEnter(): void {
-    fromEvent(
-      this._elRef.nativeElement,
-      'mouseenter',
-      { passive: true }
+    const actualMouseState$ = merge(
+      this._mouseLeave$.pipe(mapTo(true)),
+      this._mouseEnter$.pipe(mapTo(false)),
     )
+    .pipe(
+      startWith(false),
+      distinctUntilChanged()
+    );
+
+    this._mouseEnter$
       .pipe(
         filter(() => {
           return !this._wrapperElement;
@@ -198,6 +212,11 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
           this._popoverService.setActivePopoverGUID(this._guid);
         }),
         switchMap(() => this.openTimer$),
+        // we have to check that after all delays mouse still over an elemen
+        withLatestFrom(actualMouseState$),
+        filter(([_, mouseLeave]) => {
+          return !mouseLeave;
+        }),
         tap(() => this._openPopover()),
         switchMap(() => this._listenMouseHostLeave$()),
         switchMap(() => this.closeTimer$),
@@ -227,14 +246,19 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
   }
 
   private _listenMouseHostLeave$(): Observable<MouseEvent> {
-    return fromEvent(document, 'mousemove', { passive: true })
+    const mouseMove$ = this._mouseMove$
       .pipe(
         debounceTime(50),
         filter(() => !!this._wrapperElement),
         filter((event: MouseEvent) => {
           return this._popoverRef.autoClose && this._mouseLeftTheTargets(event);
         }),
-      )
+      );
+
+    return merge(
+      mouseMove$,
+      this._mouseLeave$,
+    );
   }
 
   // Check if mouse left target or popover rects

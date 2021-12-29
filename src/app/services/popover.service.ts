@@ -71,6 +71,7 @@ export class FsPopoverService {
     if (this._activeElement.popoverRef === popoverRef) {
       popoverRef.close();
       this._activeElement = void 0;
+      this._activeElementGUID = void 0;
     }
   }
 
