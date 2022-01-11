@@ -200,7 +200,7 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
     )
     .pipe(
       startWith(false),
-      distinctUntilChanged()
+      distinctUntilChanged(),
     );
 
     this._mouseEnter$
@@ -246,7 +246,7 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
   }
 
   private _listenMouseHostLeave$(): Observable<MouseEvent> {
-    const mouseMove$ = this._mouseMove$
+    return this._mouseMove$
       .pipe(
         debounceTime(50),
         filter(() => !!this._wrapperElement),
@@ -254,11 +254,12 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
           return this._popoverRef.autoClose && this._mouseLeftTheTargets(event);
         }),
       );
-
-    return merge(
-      mouseMove$,
-      this._mouseLeave$,
-    );
+    //
+    // return this._mouseLeave$
+    //   .pipe(
+    //     //
+    //     timeoutWith(200, mouseMove$),
+    //   );
   }
 
   // Check if mouse left target or popover rects
