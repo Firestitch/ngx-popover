@@ -228,7 +228,7 @@ export class FsPopoverComponent implements OnInit, OnDestroy {
   }
 
   private _openPopover(): void {
-    if (this._popoverService.activeElementGUID !== this._guid) {
+    if (this.trigger === 'mouseover' && this._popoverService.activeElementGUID !== this._guid) {
       return;
     }
 
