@@ -1,12 +1,11 @@
 import { OverlayRef } from '@angular/cdk/overlay';
-import { Injectable } from '@angular/core';
+
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { IPopoverConfig } from '../interfaces/popover-config.interface';
 
 
-@Injectable()
 export class FsPopoverRef {
 
   public overlayRef: OverlayRef;

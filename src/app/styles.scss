@@ -1,11 +1,12 @@
+@use '~@angular/material' as mat;
 @import '~@firestitch/style/styles';
 
 @mixin fs-popover($theme) {
 
-  $primary: mat-palette($theme);
+  $primary: mat.define-palette($theme);
 
   fs-popover.indication .line {
-    border-color: mat-color($primary) !important;
+    border-color: mat.get-color-from-palette($primary) !important;
   }
 }
 

@@ -39,7 +39,7 @@ const routes: Routes = [
     FsMessageModule.forRoot(),
     FsSkeletonModule,
     ToastrModule.forRoot({ preventDuplicates: true }),
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' }),
     FsMenuModule,
   ],
   declarations: [
