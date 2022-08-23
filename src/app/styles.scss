@@ -5,8 +5,8 @@
 
   $primary: mat.define-palette($theme);
 
-  fs-popover.indication .line {
-    border-color: mat.get-color-from-palette($primary) !important;
+  fs-popover.indication .popover-container {
+    text-decoration-color: mat.get-color-from-palette($primary) !important;
   }
 }
 

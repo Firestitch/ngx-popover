@@ -19,26 +19,23 @@
     <button mat-raised-button color="primary">MouseOver for Popover</button>
   </fs-popover>
 
-  <fs-popover [template]="tmpl2" maxWidth="500" size="small" [position]="position" showDelay="1000">
-    MouseOver for Popover with 1000ms delay
+  <fs-popover [template]="tmpl2" maxWidth="500" size="small" [position]="position" showDelay="500">
+    MouseOver for Popover with 500ms delay
   </fs-popover>
 
   <fs-popover [template]="tmpl2" theme="dark"  size="small" [position]="position">
     Small Dark Theme Popover
   </fs-popover>
 
-  <fs-popover [template]="tmpl2" theme="dark" size="tiny" [position]="position">
-    Tiny Dark Theme Popover
-  </fs-popover>
-
-  <fs-popover [template]="tmpl3"
-              [autoShow]="false"
-              [indication]="false"
-              [showDelay]="600"
-              theme="dark"
-              size="tiny"
-              [position]="position"
-              [data]="account">
+  <fs-popover 
+      [template]="tmpl3"
+      [autoShow]="false"
+      [indication]="false"
+      [showDelay]="600"
+      theme="dark"
+      size="tiny"
+      [position]="position"
+      [data]="account">
     With menu
   </fs-popover>
 </div>
