@@ -17,7 +17,9 @@ import { createTempatePortal } from '../helpers/create-template-portal';
 import { IPopoverActiveElement } from '../interfaces/popover-config.interface';
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class FsPopoverService {
 
   private _activeElement: IPopoverActiveElement;
