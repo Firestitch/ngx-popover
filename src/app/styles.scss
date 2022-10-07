@@ -8,5 +8,9 @@
   fs-popover.indication .popover-container {
     text-decoration-color: mat.get-color-from-palette($primary) !important;
   }
+  
+  fs-popover-wrapper .loading-spinner svg {
+    stroke: mat.get-color-from-palette($primary) !important;
+  }
 }
 

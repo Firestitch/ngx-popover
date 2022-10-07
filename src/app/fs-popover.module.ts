@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PortalModule } from '@angular/cdk/portal';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { FsPopoverComponent } from './components/popover/popover.component';
 import { FsPopoverWrapperComponent } from './components/popover-wrapper/popover-wrapper.component';
@@ -11,7 +10,6 @@ import { FsPopoverWrapperComponent } from './components/popover-wrapper/popover-
   imports: [
     CommonModule,
     PortalModule,
-    MatProgressSpinnerModule,
   ],
   declarations: [
     FsPopoverComponent,
