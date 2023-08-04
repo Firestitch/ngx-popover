@@ -16,13 +16,23 @@
 
 <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="20px" class="popovers">
   <button mat-raised-button color="primary"
-          fsPopover [template]="tmpl1"
+          fsPopover
+          [template]="tmpl1"
           [data]="account"
           wrapperClass="wrapper"
           [position]="position"
           [indication]="false"
   >
     MouseOver for Popover
+  </button>
+
+  <button mat-raised-button color="primary"
+          fsPopover
+          [text]="'Popover Text'"
+          [position]="position"
+          [indication]="false"
+  >
+    Just With Text
   </button>
 
   <fs-popover [template]="tmpl2" [maxWidth]="500" size="small" [position]="position" [showDelay]="500">
@@ -33,7 +43,7 @@
     Small Dark Theme Popover
   </fs-popover>
 
-  <fs-popover 
+  <fs-popover
       [template]="tmpl3"
       [autoShow]="false"
       [indication]="false"
