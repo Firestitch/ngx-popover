@@ -44,11 +44,27 @@ export class FsPopoverService {
 
   public openPopover(
     el: ElementRef,
+    text: string,
+    data: any,
+    popoverRef: FsPopoverRef,
+    position: Position
+  ): Element;
+
+  public openPopover(
+    el: ElementRef,
     template: TemplateRef<any>,
     data: any,
     popoverRef: FsPopoverRef,
     position: Position
-  ) {
+  ): Element;
+
+  public openPopover(
+    el: ElementRef,
+    content: TemplateRef<any> | string,
+    data: any,
+    popoverRef: FsPopoverRef,
+    position: Position
+  ): Element {
 
     if (this._activeElement) {
       this.close(this._activeElement.popoverRef)
@@ -56,9 +72,15 @@ export class FsPopoverService {
 
     const overlayRef = createOverlayRef(el, this._overlay, position);
     const containerRef = this._openPortalPreview(FsPopoverWrapperComponent, overlayRef, popoverRef);
-    const templatePortal = createTempatePortal(template, popoverRef, data);
 
-    containerRef.instance.attachTemplatePortal(templatePortal);
+    if (content instanceof TemplateRef) {
+      const templatePortal = createTempatePortal(content, popoverRef, data);
+
+      containerRef.instance.attachTemplatePortal(templatePortal);
+    } else {
+      containerRef.instance.setTextualContent(content);
+    }
+
     popoverRef.overlayRef = overlayRef;
 
     this._activeElement = {

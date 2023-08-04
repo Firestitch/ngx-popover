@@ -5,6 +5,10 @@
   'hidden': !(popoverRef.componentVisible$ | async)
   }">
   <div class="mat-elevation-z4 popover-content">
+    <ng-container *ngIf="content">
+      {{content}}
+    </ng-container>
+
     <ng-template cdkPortalOutlet></ng-template>
   </div>
 

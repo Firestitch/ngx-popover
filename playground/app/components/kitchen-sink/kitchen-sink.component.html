@@ -15,9 +15,15 @@
 </ng-template>
 
 <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="20px" class="popovers">
-  <fs-popover [template]="tmpl1" [data]="account" wrapperClass="wrapper" [autoShow]="false" [position]="position" [indication]="false">
-    <button mat-raised-button color="primary">MouseOver for Popover</button>
-  </fs-popover>
+  <button mat-raised-button color="primary"
+          fsPopover [template]="tmpl1"
+          [data]="account"
+          wrapperClass="wrapper"
+          [position]="position"
+          [indication]="false"
+  >
+    MouseOver for Popover
+  </button>
 
   <fs-popover [template]="tmpl2" [maxWidth]="500" size="small" [position]="position" [showDelay]="500">
     MouseOver for Popover with 500ms delay

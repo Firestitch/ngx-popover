@@ -39,6 +39,7 @@ export class FsPopoverWrapperComponent extends BasePortalOutlet implements OnIni
 
   @HostBinding('class') class;
 
+  public content: string;
   public hidden = false;
 
   private _wrapperClass;
@@ -109,6 +110,10 @@ export class FsPopoverWrapperComponent extends BasePortalOutlet implements OnIni
     }
 
     return this._portalOutlet.attachComponentPortal(portal);
+  }
+
+  public setTextualContent(content: string): void {
+    this.content = content;
   }
 
   public updatePosition() {
