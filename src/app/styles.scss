@@ -5,12 +5,36 @@
 
   $primary: mat.define-palette($theme);
 
-  fs-popover.indication .popover-container {
-    text-decoration-color: mat.get-color-from-palette($primary) !important;
+  .fs-popover {
+    cursor: pointer;
+
+    &.fs-popover-component {
+      display: inline-flex;
+      position: relative;
+    }
+
+    &.fs-popover-component.fs-popover-enabled.indication {
+      .popover-container {
+        @include popover-indication($primary)
+      }
+    }
+
+    &.fs-popover-enabled.indication:not(.fs-popover-component) {
+      @include popover-indication($primary)
+    }
   }
-  
-  fs-popover-wrapper .loading-spinner svg {
+
+  .fs-popover-wrapper .loading-spinner svg {
     stroke: mat.get-color-from-palette($primary) !important;
   }
 }
 
+
+@mixin popover-indication($p) {
+  text-decoration-color: mat.get-color-from-palette($p) !important;
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-decoration-color: #ccc;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}

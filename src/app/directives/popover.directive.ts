@@ -38,6 +38,9 @@ import { FsPopoverRef } from '../class/popover-ref';
 
 @Directive({
   selector: '[fsPopover]',
+  host: {
+    'class': 'fs-popover',
+  },
 })
 export class FsPopoverDirective implements OnInit, OnChanges, OnDestroy {
 
@@ -93,6 +96,7 @@ export class FsPopoverDirective implements OnInit, OnChanges, OnDestroy {
   public trigger: 'click' | 'mouseover' = 'mouseover';
 
   @Input()
+  @HostBinding('class.fs-popover-enabled')
   public enabled = true;
 
   private _initialized = false;

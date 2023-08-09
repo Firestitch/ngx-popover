@@ -5,16 +5,17 @@ import {
   ElementRef,
   EmbeddedViewRef,
   ViewChild,
-  HostBinding,
-  OnDestroy, NgZone,
+  OnDestroy,
+  NgZone,
   OnInit,
+  Renderer2,
 } from '@angular/core';
 
 import {
   BasePortalOutlet,
   CdkPortalOutlet,
   ComponentPortal,
-  TemplatePortal
+  TemplatePortal,
 } from '@angular/cdk/portal';
 
 import { fromEvent, Subject } from 'rxjs';
@@ -28,6 +29,9 @@ import { FsPopoverRef } from '../../class/popover-ref';
   templateUrl: 'popover-wrapper.component.html',
   styleUrls: [ 'popover-wrapper.component.scss' ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    'class': 'fs-popover-wrapper',
+  },
 })
 export class FsPopoverWrapperComponent extends BasePortalOutlet implements OnInit, OnDestroy {
 
@@ -35,14 +39,11 @@ export class FsPopoverWrapperComponent extends BasePortalOutlet implements OnIni
   public _portalOutlet: CdkPortalOutlet;
 
   @ViewChild('spinner')
-  public spinner;
-
-  @HostBinding('class') class;
+  public spinner: ElementRef;
 
   public content: string;
-  public hidden = false;
 
-  private _wrapperClass;
+  private _wrapperClass: string;
   private _contentChangesObserver: MutationObserver;
   private _updatePosition = new Subject<void>();
 
@@ -52,6 +53,7 @@ export class FsPopoverWrapperComponent extends BasePortalOutlet implements OnIni
     public popoverRef: FsPopoverRef,
     private _el: ElementRef,
     private _zone: NgZone,
+    private _renderer: Renderer2,
   ) {
     super();
     this._updateClass();
@@ -140,7 +142,9 @@ export class FsPopoverWrapperComponent extends BasePortalOutlet implements OnIni
   }
 
   private _updateClass() {
-    this.class = ['popover-wrapper', this._wrapperClass].filter(Boolean).join(' ');
+    if (this._wrapperClass) {
+      this._renderer.addClass(this._el.nativeElement, this._wrapperClass);
+    }
   }
 
   private _observeContentChanges() {

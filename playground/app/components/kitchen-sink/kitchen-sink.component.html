@@ -35,25 +35,25 @@
     Just With Text
   </button>
 
-  <fs-popover [template]="tmpl2" [maxWidth]="500" size="small" [position]="position" [showDelay]="500">
+  <div fsPopover [template]="tmpl2" [maxWidth]="500" size="small" [enabled]="true" [position]="position" [showDelay]="500">
     MouseOver for Popover with 500ms delay
-  </fs-popover>
+  </div>
 
-  <fs-popover [template]="tmpl2" theme="dark"  size="small" [position]="position">
+  <div fsPopover [template]="tmpl2" theme="dark"  size="small" [position]="position">
     Small Dark Theme Popover
-  </fs-popover>
+  </div>
 
-  <fs-popover
-      [template]="tmpl3"
-      [autoShow]="false"
-      [indication]="false"
-      [showDelay]="600"
-      theme="dark"
-      size="tiny"
-      [position]="position"
-      [data]="account">
+  <div fsPopover
+       [template]="tmpl3"
+       [autoShow]="false"
+       [indication]="false"
+       [showDelay]="600"
+       theme="dark"
+       size="tiny"
+       [position]="position"
+       [data]="account">
     With menu
-  </fs-popover>
+  </div>
 </div>
 
 <mat-form-field>
