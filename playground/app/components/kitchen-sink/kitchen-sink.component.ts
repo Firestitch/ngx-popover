@@ -1,8 +1,5 @@
-import { Position } from './../../../../src/app/enums/position';
 import { Component } from '@angular/core';
-import { KitchenSinkConfigureComponent } from '../kitchen-sink-configure';
-import { FsExampleComponent } from '@firestitch/example';
-import { FsMessage } from '@firestitch/message';
+import { Position } from './../../../../src/app/enums/position';
 
 @Component({
   selector: 'kitchen-sink',
@@ -26,8 +23,4 @@ export class KitchenSinkComponent {
     email: 'email@email.com'
   };
 
-  constructor(private exampleComponent: FsExampleComponent,
-              private message: FsMessage) {
-    exampleComponent.setConfigureComponent(KitchenSinkConfigureComponent, { config: this.config });
-  }
 }
