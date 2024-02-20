@@ -45,3 +45,4 @@ dist/*
 /docs
 /src/package.json
 upgrade.js
+.angular
