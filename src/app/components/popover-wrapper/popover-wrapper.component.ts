@@ -83,7 +83,7 @@ export class FsPopoverWrapperComponent extends BasePortalOutlet implements OnIni
 
   public ngOnDestroy() {
     this._contentChangesObserver.disconnect();
-    this._destroy$.next();
+    this._destroy$.next(null);
     this._destroy$.complete();
   }
 
@@ -119,7 +119,7 @@ export class FsPopoverWrapperComponent extends BasePortalOutlet implements OnIni
   }
 
   public updatePosition() {
-    this._updatePosition.next();
+    this._updatePosition.next(null);
   }
 
   private _watchMousePosition() {

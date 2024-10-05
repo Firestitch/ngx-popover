@@ -143,12 +143,12 @@ export class FsPopoverDirective implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnDestroy() {
-    this._popoverClosed$.next();
-    this._destroy$.next();
+    this._popoverClosed$.next(null);
+    this._destroy$.next(null);
   }
 
   private _closePopover() {
-    this._popoverClosed$.next();
+    this._popoverClosed$.next(null);
 
     this._ngZone.run(() => {
       this._wrapperElement = null;
