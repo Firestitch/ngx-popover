@@ -105,9 +105,9 @@ export class FsPopoverDirective implements OnInit, OnChanges, OnDestroy {
   private _wrapperElement: Element;
   private _hostBounds: DOMRect;
 
-  private _mouseEnter$ = fromEvent(this._elRef.nativeElement, 'mouseenter');
-  private _mouseMove$ = fromEvent(document, 'mousemove', { passive: true });
-  private _mouseLeave$ = fromEvent<MouseEvent>(this._elRef.nativeElement, 'mouseleave');
+  private _mouseEnter$: Observable<MouseEvent>;
+  private _mouseMove$: Observable<Event>;
+  private _mouseLeave$: Observable<MouseEvent>;
 
   private _popoverClosed$ = new Subject<void>();
   private _destroy$ = new Subject<void>();
@@ -118,6 +118,9 @@ export class FsPopoverDirective implements OnInit, OnChanges, OnDestroy {
     private _ngZone: NgZone,
     @Optional() private _router: Router,
   ) {
+    this._mouseEnter$ = fromEvent(this._elRef.nativeElement, 'mouseenter');
+    this._mouseMove$ = fromEvent(document, 'mousemove', { passive: true });
+    this._mouseLeave$ = fromEvent(this._elRef.nativeElement, 'mouseleave');
   }
 
   public get openTimer$(): Observable<number> {
