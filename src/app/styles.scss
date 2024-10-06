@@ -3,7 +3,7 @@
 
 @mixin fs-popover($theme) {
 
-  $primary: mat.define-palette($theme);
+  $primary: mat.m2-define-palette($theme);
 
   .fs-popover {
     cursor: pointer;
@@ -25,13 +25,13 @@
   }
 
   .fs-popover-wrapper .loading-spinner svg {
-    stroke: mat.get-color-from-palette($primary) !important;
+    stroke: mat.m2-get-color-from-palette($primary) !important;
   }
 }
 
 
 @mixin popover-indication($p) {
-  text-decoration-color: mat.get-color-from-palette($p) !important;
+  text-decoration-color: mat.m2-get-color-from-palette($p) !important;
   text-decoration: underline;
   text-decoration-style: dashed;
   text-decoration-color: #ccc;
