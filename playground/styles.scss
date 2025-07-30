@@ -1,3 +1,5 @@
+
+@use '@firestitch/style/styles' as fs-style;
 @use '@angular/material' as mat;
 @import '@firestitch/component-tools/assets/playground.scss';
 @import '@firestitch/message/styles';
@@ -7,3 +9,4 @@
 
 @include fs-drawer(mat.$m2-blue-palette);
 @include fs-popover(mat.$m2-blue-palette);
+@include fs-style.core();

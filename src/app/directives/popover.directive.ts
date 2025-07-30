@@ -1,19 +1,21 @@
 import {
+  Directive,
   ElementRef,
+  HostBinding,
   Input,
   NgZone,
+  OnChanges,
   OnDestroy,
   OnInit,
   Optional,
-  TemplateRef,
-  HostBinding,
-  Directive,
-  OnChanges,
   SimpleChanges,
+  TemplateRef,
 } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
-import { fromEvent, pipe, Subject, timer, Observable, merge } from 'rxjs';
+import { guid } from '@firestitch/common';
+
+import { fromEvent, merge, Observable, pipe, Subject, timer } from 'rxjs';
 import {
   debounceTime,
   delay,
@@ -28,12 +30,11 @@ import {
   withLatestFrom,
 } from 'rxjs/operators';
 
-import { guid } from '@firestitch/common';
 
-import { Position } from '../enums/position';
-import { FsPopoverService } from '../services/popover.service';
-import { pointInRect } from '../helpers/point-in-rect';
 import { FsPopoverRef } from '../class/popover-ref';
+import { Position } from '../enums/position';
+import { pointInRect } from '../helpers/point-in-rect';
+import { FsPopoverService } from '../services/popover.service';
 
 
 @Directive({
@@ -202,11 +203,11 @@ export class FsPopoverDirective implements OnInit, OnChanges, OnDestroy {
             this._destroy$
               .pipe(delay(200)),
           ),
-        )
+        ),
       )
       .subscribe(() => {
         this._closePopover();
-      })
+      });
   }
 
   private _listenMouseHostClick(): void {
@@ -270,23 +271,19 @@ export class FsPopoverDirective implements OnInit, OnChanges, OnDestroy {
     this._hostBounds = this._elRef.nativeElement.getBoundingClientRect();
 
     this._ngZone.run(() => {
-      if (this.template) {
-        this._wrapperElement = this._popoverService.openPopover(
-          this._elRef,
-          this.template,
-          this.data,
-          this._popoverRef,
-          this.position
-        );
-      } else {
-        this._wrapperElement = this._popoverService.openPopover(
-          this._elRef,
-          this.text,
-          this.data,
-          this._popoverRef,
-          this.position
-        );
-      }
+      this._wrapperElement = this.template ? this._popoverService.openPopover(
+        this._elRef,
+        this.template,
+        this.data,
+        this._popoverRef,
+        this.position,
+      ) : this._popoverService.openPopover(
+        this._elRef,
+        this.text,
+        this.data,
+        this._popoverRef,
+        this.position,
+      );
     });
   }
 
@@ -325,7 +322,7 @@ export class FsPopoverDirective implements OnInit, OnChanges, OnDestroy {
       hostBounds.x + hostBounds.width,
       hostBounds.y + hostBounds.height,
       event.x,
-      event.y
+      event.y,
     );
 
     const pointInPopoverRect = pointInRect(
@@ -334,7 +331,7 @@ export class FsPopoverDirective implements OnInit, OnChanges, OnDestroy {
       popoverBounds.x + popoverBounds.width,
       popoverBounds.y + popoverBounds.height,
       event.x,
-      event.y
+      event.y,
     );
 
     return !pointInHostRect && !pointInPopoverRect;

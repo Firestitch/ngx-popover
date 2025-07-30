@@ -1,7 +1,12 @@
-<ng-template #tmpl1 let-data="data" let-popover="popover">
-  <app-popover-content [data]="data" [popover]="popover"></app-popover-content>
+<ng-template
+    #tmpl1
+    let-data="data"
+    let-popover="popover">
+  <app-popover-content
+    [data]="data"
+    [popover]="popover">
+  </app-popover-content>
 </ng-template>
-
 <ng-template #tmpl2>
   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
   et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
@@ -9,62 +14,76 @@
   fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
   mollit anim id est laborum.
 </ng-template>
-
-<ng-template #tmpl3 let-data="data" let-popover="popover">
-  <app-popover-content-with-menu [data]="data" [popover]="popover"></app-popover-content-with-menu>
+<ng-template
+    #tmpl3
+    let-data="data"
+    let-popover="popover">
+  <app-popover-content-with-menu
+    [data]="data"
+    [popover]="popover">
+  </app-popover-content-with-menu>
 </ng-template>
-
-<div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="20px" class="popovers">
-  <button mat-raised-button color="primary"
-          fsPopover
-          [template]="tmpl1"
-          [data]="account"
-          wrapperClass="wrapper"
-          [position]="position"
-          [indication]="false"
-  >
+<div class="fs-column.gap-sm.align-center popovers">
+  <button
+      mat-raised-button
+      color="primary"
+      fsPopover
+      [template]="tmpl1"
+      [data]="account"
+      wrapperClass="wrapper"
+      [position]="position"
+      [indication]="false">
     MouseOver for Popover
   </button>
-
-  <button mat-raised-button color="primary"
-          fsPopover
-          [text]="'Popover Text'"
-          [position]="position"
-          [indication]="false"
-  >
+  <button
+      mat-raised-button
+      color="primary"
+      fsPopover
+      [text]="'Popover Text'"
+      [position]="position"
+      [indication]="false">
     Just With Text
   </button>
-
-  <div fsPopover [template]="tmpl2" [maxWidth]="500" size="small" [enabled]="true" [position]="position" [showDelay]="500">
+  <div
+      fsPopover
+      [template]="tmpl2"
+      [maxWidth]="500"
+      size="small"
+      [enabled]="true"
+      [position]="position"
+      [showDelay]="500">
     MouseOver for Popover with 500ms delay
   </div>
-
-  <div fsPopover [template]="tmpl2" theme="dark"  size="small" [position]="position">
+  <div
+      fsPopover
+      [template]="tmpl2"
+      theme="dark"
+      size="small"
+      [position]="position">
     Small Dark Theme Popover
   </div>
-
-  <div fsPopover
-       [template]="tmpl3"
-       [autoShow]="false"
-       [indication]="false"
-       [showDelay]="600"
-       theme="dark"
-       size="tiny"
-       [position]="position"
-       [data]="account">
+  <div
+      fsPopover
+      [template]="tmpl3"
+      [autoShow]="false"
+      [indication]="false"
+      [showDelay]="600"
+      theme="dark"
+      size="tiny"
+      [position]="position"
+      [data]="account">
     With menu
   </div>
 </div>
-
 <mat-form-field>
   <mat-select
-    [(ngModel)]="position"
-    name="position"
-    placeholder="Position">
-      <mat-option
+      [(ngModel)]="position"
+      name="position"
+      placeholder="Position">
+    <mat-option
         *ngFor="let item of positions"
         [value]="item.value">
-          {{ item.name }}
-      </mat-option>
+      {{ item.name }}
+    </mat-option>
   </mat-select>
 </mat-form-field>

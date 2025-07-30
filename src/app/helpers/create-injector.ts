@@ -1,12 +1,14 @@
-import { Injector } from '@angular/core';
-import { PortalInjector } from '@angular/cdk/portal';
+import { Injector, StaticProvider } from '@angular/core';
+
 import { FsPopoverRef } from '../class/popover-ref';
 
+export function createInjector(popoverRef: FsPopoverRef, parentInjector: Injector): Injector {
+  const providers: StaticProvider[] = [
+    { provide: FsPopoverRef, useValue: popoverRef },
+  ];
 
-export function createInjector(popoverRef: FsPopoverRef, parentInjector: Injector) {
-  const injectionTokens = new WeakMap<any, any>([
-    [FsPopoverRef, popoverRef],
-  ]);
-
-  return new PortalInjector(parentInjector, injectionTokens);
+  return Injector.create({
+    providers,
+    parent: parentInjector,
+  });
 }

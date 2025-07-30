@@ -4,11 +4,11 @@ import {
   ComponentRef,
   ElementRef,
   EmbeddedViewRef,
-  ViewChild,
-  OnDestroy,
   NgZone,
+  OnDestroy,
   OnInit,
   Renderer2,
+  ViewChild,
 } from '@angular/core';
 
 import {
@@ -26,8 +26,8 @@ import { FsPopoverRef } from '../../class/popover-ref';
 
 @Component({
   selector: 'fs-popover-wrapper',
-  templateUrl: 'popover-wrapper.component.html',
-  styleUrls: [ 'popover-wrapper.component.scss' ],
+  templateUrl: './popover-wrapper.component.html',
+  styleUrls: ['./popover-wrapper.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'class': 'fs-popover-wrapper',
@@ -63,7 +63,7 @@ export class FsPopoverWrapperComponent extends BasePortalOutlet implements OnIni
   }
 
   public set maxWidth(value: number) {
-    this._el.nativeElement.style.maxWidth = value ? value + 'px' : void 0;
+    this._el.nativeElement.style.maxWidth = value ? `${value  }px` : void 0;
   }
 
   public set wrapperClass(value: string) {
@@ -125,7 +125,7 @@ export class FsPopoverWrapperComponent extends BasePortalOutlet implements OnIni
   private _watchMousePosition() {
     const componentVisibilityChange$ = this.popoverRef.componentVisible$
       .pipe(
-        filter((value) => value === true)
+        filter((value) => value),
       );
 
     this._zone.runOutsideAngular(() => {
@@ -135,8 +135,8 @@ export class FsPopoverWrapperComponent extends BasePortalOutlet implements OnIni
           takeUntil(this._destroy$),
         )
         .subscribe((e: MouseEvent) => {
-          this.spinner.nativeElement.style.left = e.x + 'px';
-          this.spinner.nativeElement.style.top = (e.y + 20) + 'px';
+          this.spinner.nativeElement.style.left = `${e.x  }px`;
+          this.spinner.nativeElement.style.top = `${e.y + 20  }px`;
         });
     });
   }
@@ -150,7 +150,7 @@ export class FsPopoverWrapperComponent extends BasePortalOutlet implements OnIni
   private _observeContentChanges() {
     const config = {
       childList: true,
-      subtree: true
+      subtree: true,
     };
 
     this._contentChangesObserver = new MutationObserver(() => {
@@ -168,6 +168,6 @@ export class FsPopoverWrapperComponent extends BasePortalOutlet implements OnIni
       )
       .subscribe(() => {
         this.popoverRef.updatePosition();
-      })
+      });
   }
 }
