@@ -1,16 +1,4 @@
-import {
-  Directive,
-  ElementRef,
-  HostBinding,
-  Input,
-  NgZone,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Optional,
-  SimpleChanges,
-  TemplateRef,
-} from '@angular/core';
+import { Directive, ElementRef, HostBinding, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, inject } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
 import { guid } from '@firestitch/common';
@@ -45,6 +33,11 @@ import { FsPopoverService } from '../services/popover.service';
     standalone: true,
 })
 export class FsPopoverDirective implements OnInit, OnChanges, OnDestroy {
+  private _elRef = inject(ElementRef);
+  private _popoverService = inject(FsPopoverService);
+  private _ngZone = inject(NgZone);
+  private _router = inject(Router, { optional: true });
+
 
   private _guid = guid('xxxxxxx');
 
@@ -114,12 +107,7 @@ export class FsPopoverDirective implements OnInit, OnChanges, OnDestroy {
   private _popoverClosed$ = new Subject<void>();
   private _destroy$ = new Subject<void>();
 
-  constructor(
-    private _elRef: ElementRef,
-    private _popoverService: FsPopoverService,
-    private _ngZone: NgZone,
-    @Optional() private _router: Router,
-  ) {
+  constructor() {
     this._mouseEnter$ = fromEvent(this._elRef.nativeElement, 'mouseenter');
     this._mouseMove$ = fromEvent(document, 'mousemove', { passive: true });
     this._mouseLeave$ = fromEvent(this._elRef.nativeElement, 'mouseleave');
