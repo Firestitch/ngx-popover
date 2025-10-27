@@ -5,9 +5,9 @@
   'hidden': !(popoverRef.componentVisible$ | async)
   }">
   <div class="mat-elevation-z4 popover-content">
-    <ng-container *ngIf="content">
+    @if (content) {
       {{content}}
-    </ng-container>
+    }
 
     <ng-template cdkPortalOutlet></ng-template>
   </div>
@@ -16,17 +16,19 @@
   <div class="fs-popover-arrow dark"></div>
 </div>
 
-<div class="loading-spinner"
+@if (popoverRef.loading && !(popoverRef.componentVisible$ | async)) {
+  <div class="loading-spinner"
     #spinner
-    *ngIf="popoverRef.loading && !(popoverRef.componentVisible$ | async)">
-  <svg xmlns="http://www.w3.org/2000/svg" [attr.width]="popoverRef.loadingDiameter" [attr.height]="popoverRef.loadingDiameter" viewBox="0 0 42 42" stroke="grey">
-    <g fill="none" fill-rule="evenodd">
-      <g transform="translate(1 1)" stroke-width="3">
-        <circle stroke-opacity=".5" cx="18" cy="18" r="18"/>
-        <path d="M36 18c0-9.94-8.06-18-18-18">
-          <animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="1s" repeatCount="indefinite"/>
-        </path>
+    >
+    <svg xmlns="http://www.w3.org/2000/svg" [attr.width]="popoverRef.loadingDiameter" [attr.height]="popoverRef.loadingDiameter" viewBox="0 0 42 42" stroke="grey">
+      <g fill="none" fill-rule="evenodd">
+        <g transform="translate(1 1)" stroke-width="3">
+          <circle stroke-opacity=".5" cx="18" cy="18" r="18"/>
+          <path d="M36 18c0-9.94-8.06-18-18-18">
+            <animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="1s" repeatCount="indefinite"/>
+          </path>
+        </g>
       </g>
-    </g>
-  </svg>
-</div>
+    </svg>
+  </div>
+}

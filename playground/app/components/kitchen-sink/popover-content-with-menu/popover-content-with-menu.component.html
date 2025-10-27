@@ -1,8 +1,7 @@
 <div *fsSkeleton="loaded; pattern: [100, 100, 100]">
-  <ng-container *ngIf="data">
+  @if (data) {
     <div>{{data.name}}</div>
     <small>{{data.email}}</small>
-
     <a target="_blank"
       class="edit"
       mat-icon-button>
@@ -16,5 +15,5 @@
         Calendar
       </ng-template>
     </fs-menu>
-  </ng-container>
+  }
 </div>
