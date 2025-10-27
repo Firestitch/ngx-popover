@@ -3,7 +3,7 @@
  */
 
 
-export { FsPopoverModule } from './app/fs-popover.module';
+
 
 export { FsPopoverComponent } from './app/components/popover/popover.component';
 export { FsPopoverDirective } from './app/directives/popover.directive';

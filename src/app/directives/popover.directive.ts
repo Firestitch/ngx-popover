@@ -38,10 +38,11 @@ import { FsPopoverService } from '../services/popover.service';
 
 
 @Directive({
-  selector: '[fsPopover]',
-  host: {
-    'class': 'fs-popover',
-  },
+    selector: '[fsPopover]',
+    host: {
+        'class': 'fs-popover',
+    },
+    standalone: true,
 })
 export class FsPopoverDirective implements OnInit, OnChanges, OnDestroy {
 

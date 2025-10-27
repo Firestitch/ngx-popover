@@ -22,16 +22,23 @@ import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 
 import { FsPopoverRef } from '../../class/popover-ref';
+import { NgClass, AsyncPipe } from '@angular/common';
 
 
 @Component({
-  selector: 'fs-popover-wrapper',
-  templateUrl: './popover-wrapper.component.html',
-  styleUrls: ['./popover-wrapper.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  host: {
-    'class': 'fs-popover-wrapper',
-  },
+    selector: 'fs-popover-wrapper',
+    templateUrl: './popover-wrapper.component.html',
+    styleUrls: ['./popover-wrapper.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    host: {
+        'class': 'fs-popover-wrapper',
+    },
+    standalone: true,
+    imports: [
+        NgClass,
+        CdkPortalOutlet,
+        AsyncPipe,
+    ],
 })
 export class FsPopoverWrapperComponent extends BasePortalOutlet implements OnInit, OnDestroy {
 
