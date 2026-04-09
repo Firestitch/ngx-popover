@@ -3,7 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 
 import { guid } from '@firestitch/common';
 
-import { fromEvent, merge, Observable, pipe, Subject, timer } from 'rxjs';
+import { Observable, Subject, fromEvent, merge, pipe, timer } from 'rxjs';
 import {
   debounceTime,
   delay,
@@ -26,20 +26,13 @@ import { FsPopoverService } from '../services/popover.service';
 
 
 @Directive({
-    selector: '[fsPopover]',
-    host: {
-        'class': 'fs-popover',
-    },
-    standalone: true,
+  selector: '[fsPopover]',
+  host: {
+    'class': 'fs-popover',
+  },
+  standalone: true,
 })
 export class FsPopoverDirective implements OnInit, OnChanges, OnDestroy {
-  private _elRef = inject(ElementRef);
-  private _popoverService = inject(FsPopoverService);
-  private _ngZone = inject(NgZone);
-  private _router = inject(Router, { optional: true });
-
-
-  private _guid = guid('xxxxxxx');
 
   @Input()
   public text: string;
@@ -109,6 +102,11 @@ export class FsPopoverDirective implements OnInit, OnChanges, OnDestroy {
 
   private _popoverClosed$ = new Subject<void>();
   private _destroy$ = new Subject<void>();
+  private _elRef = inject(ElementRef);
+  private _popoverService = inject(FsPopoverService);
+  private _ngZone = inject(NgZone);
+  private _router = inject(Router, { optional: true });
+  private _guid = guid('xxxxxxx');
 
   constructor() {
     this._mouseEnter$ = fromEvent(this._elRef.nativeElement, 'mouseenter');
