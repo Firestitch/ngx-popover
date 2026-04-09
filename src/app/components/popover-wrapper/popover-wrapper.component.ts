@@ -1,15 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ComponentRef,
-  ElementRef,
-  EmbeddedViewRef,
-  NgZone,
-  OnDestroy,
-  OnInit,
-  Renderer2,
-  ViewChild,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, ComponentRef, ElementRef, EmbeddedViewRef, NgZone, OnDestroy, OnInit, Renderer2, ViewChild, inject } from '@angular/core';
 
 import {
   BasePortalOutlet,
@@ -22,18 +11,30 @@ import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 
 import { FsPopoverRef } from '../../class/popover-ref';
+import { NgClass, AsyncPipe } from '@angular/common';
 
 
 @Component({
-  selector: 'fs-popover-wrapper',
-  templateUrl: './popover-wrapper.component.html',
-  styleUrls: ['./popover-wrapper.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  host: {
-    'class': 'fs-popover-wrapper',
-  },
+    selector: 'fs-popover-wrapper',
+    templateUrl: './popover-wrapper.component.html',
+    styleUrls: ['./popover-wrapper.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    host: {
+        'class': 'fs-popover-wrapper',
+    },
+    standalone: true,
+    imports: [
+        NgClass,
+        CdkPortalOutlet,
+        AsyncPipe,
+    ],
 })
 export class FsPopoverWrapperComponent extends BasePortalOutlet implements OnInit, OnDestroy {
+  popoverRef = inject(FsPopoverRef);
+  private _el = inject(ElementRef);
+  private _zone = inject(NgZone);
+  private _renderer = inject(Renderer2);
+
 
   @ViewChild(CdkPortalOutlet, { static: true })
   public _portalOutlet: CdkPortalOutlet;
@@ -49,12 +50,7 @@ export class FsPopoverWrapperComponent extends BasePortalOutlet implements OnIni
 
   private _destroy$ = new Subject<void>();
 
-  constructor(
-    public popoverRef: FsPopoverRef,
-    private _el: ElementRef,
-    private _zone: NgZone,
-    private _renderer: Renderer2,
-  ) {
+  constructor() {
     super();
     this._updateClass();
 

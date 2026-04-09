@@ -1,7 +1,7 @@
 <ng-template
-    #tmpl1
-    let-data="data"
-    let-popover="popover">
+  #tmpl1
+  let-data="data"
+  let-popover="popover">
   <app-popover-content
     [data]="data"
     [popover]="popover">
@@ -15,9 +15,9 @@
   mollit anim id est laborum.
 </ng-template>
 <ng-template
-    #tmpl3
-    let-data="data"
-    let-popover="popover">
+  #tmpl3
+  let-data="data"
+  let-popover="popover">
   <app-popover-content-with-menu
     [data]="data"
     [popover]="popover">
@@ -25,65 +25,66 @@
 </ng-template>
 <div class="fs-column.gap-sm.align-center popovers">
   <button
-      mat-raised-button
-      color="primary"
-      fsPopover
-      [template]="tmpl1"
-      [data]="account"
-      wrapperClass="wrapper"
-      [position]="position"
-      [indication]="false">
+    mat-raised-button
+    color="primary"
+    fsPopover
+    [template]="tmpl1"
+    [data]="account"
+    wrapperClass="wrapper"
+    [position]="position"
+    [indication]="false">
     MouseOver for Popover
   </button>
   <button
-      mat-raised-button
-      color="primary"
-      fsPopover
-      [text]="'Popover Text'"
-      [position]="position"
-      [indication]="false">
+    mat-raised-button
+    color="primary"
+    fsPopover
+    [text]="'Popover Text'"
+    [position]="position"
+    [indication]="false">
     Just With Text
   </button>
   <div
-      fsPopover
-      [template]="tmpl2"
-      [maxWidth]="500"
-      size="small"
-      [enabled]="true"
-      [position]="position"
-      [showDelay]="500">
+    fsPopover
+    [template]="tmpl2"
+    [maxWidth]="500"
+    size="small"
+    [enabled]="true"
+    [position]="position"
+    [showDelay]="500">
     MouseOver for Popover with 500ms delay
   </div>
   <div
-      fsPopover
-      [template]="tmpl2"
-      theme="dark"
-      size="small"
-      [position]="position">
+    fsPopover
+    [template]="tmpl2"
+    theme="dark"
+    size="small"
+    [position]="position">
     Small Dark Theme Popover
   </div>
   <div
-      fsPopover
-      [template]="tmpl3"
-      [autoShow]="false"
-      [indication]="false"
-      [showDelay]="600"
-      theme="dark"
-      size="tiny"
-      [position]="position"
-      [data]="account">
+    fsPopover
+    [template]="tmpl3"
+    [autoShow]="false"
+    [indication]="false"
+    [showDelay]="600"
+    theme="dark"
+    size="tiny"
+    [position]="position"
+    [data]="account">
     With menu
   </div>
 </div>
 <mat-form-field>
   <mat-select
-      [(ngModel)]="position"
-      name="position"
-      placeholder="Position">
-    <mat-option
-        *ngFor="let item of positions"
+    [(ngModel)]="position"
+    name="position"
+    placeholder="Position">
+    @for (item of positions; track item) {
+      <mat-option
         [value]="item.value">
-      {{ item.name }}
-    </mat-option>
+        {{ item.name }}
+      </mat-option>
+    }
   </mat-select>
 </mat-form-field>

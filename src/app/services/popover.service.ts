@@ -1,4 +1,4 @@
-import { ElementRef, Injectable, Injector, TemplateRef } from '@angular/core';
+import { ElementRef, Injectable, Injector, TemplateRef, inject } from '@angular/core';
 
 import {
   ComponentType,
@@ -21,14 +21,12 @@ import { IPopoverActiveElement } from '../interfaces/popover-config.interface';
   providedIn: 'root',
 })
 export class FsPopoverService {
+  private _injector = inject(Injector);
+  private _overlay = inject(Overlay);
+
 
   private _activeElement: IPopoverActiveElement;
   private _activeElementGUID: string;
-
-  constructor(
-    private _injector: Injector,
-    private _overlay: Overlay,
-  ) {}
 
   public get hasActivePopover() {
     return !!this._activeElement;
