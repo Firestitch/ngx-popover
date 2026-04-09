@@ -14,6 +14,7 @@ export class FsPopoverRef {
   private readonly _autoClose$ = new BehaviorSubject<boolean>(true);
   private readonly _componentLoading$ = new BehaviorSubject<boolean>(true);
   private _maxWidth: number;
+  private _maxHeight: number;
   private _wrapperClass: string;
   private _loadingDiameter: number;
   private _loading: boolean;
@@ -91,6 +92,10 @@ export class FsPopoverRef {
     return this._maxWidth;
   }
 
+  public get maxHeight() {
+    return this._maxHeight;
+  }
+
   public show() {
     setTimeout(() => {
       this._componentLoading$.next(false);
@@ -112,6 +117,7 @@ export class FsPopoverRef {
   private _init(config: IPopoverConfig) {
     this._wrapperClass = config.wrapperClass;
     this._maxWidth = config.maxWidth;
+    this._maxHeight = config.maxHeight;
     this._loading = config.loading;
     this._loadingDiameter = config.loadingDiameter;
     this._size = config.size;

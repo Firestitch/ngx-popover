@@ -3,6 +3,7 @@ import { FsPopoverRef } from '../class/popover-ref';
 
 export interface IPopoverConfig {
   maxWidth?: number;
+  maxHeight?: number;
   wrapperClass?: string;
   autoShow?: boolean;
   autoClose?: boolean;

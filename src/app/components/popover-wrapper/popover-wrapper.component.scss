@@ -17,7 +17,8 @@ $dark-theme-color: #707070;
     padding: 8px;
     color: #1b1b1b;
     box-sizing: border-box;
-    overflow: hidden;
+    overflow: auto;
+    max-height: var(--fs-popover-max-height, calc(100vh - 100px));
   }
 
   &.theme-dark .popover-content {

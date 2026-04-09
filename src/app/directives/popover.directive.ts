@@ -66,6 +66,9 @@ export class FsPopoverDirective implements OnInit, OnChanges, OnDestroy {
   public maxWidth = 250;
 
   @Input()
+  public maxHeight: number;
+
+  @Input()
   public wrapperClass: string;
 
   @Input()
@@ -170,6 +173,7 @@ export class FsPopoverDirective implements OnInit, OnChanges, OnDestroy {
 
     this._popoverRef = new FsPopoverRef({
       maxWidth: this.maxWidth,
+      maxHeight: this.maxHeight,
       wrapperClass: this.wrapperClass,
       autoShow: this.autoShow,
       autoClose: this.autoClose,

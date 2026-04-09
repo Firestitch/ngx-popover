@@ -1,61 +1,60 @@
 import { ElementRef } from '@angular/core';
-import { FlexibleConnectedPositionStrategy, Overlay, PositionStrategy } from '@angular/cdk/overlay';
+import { ConnectedPosition, FlexibleConnectedPositionStrategy, Overlay, PositionStrategy } from '@angular/cdk/overlay';
 import { Position } from './../enums/position';
 
 
+const POSITIONS: Record<Position, ConnectedPosition> = {
+  [Position.North]: {
+    originX: 'center',
+    originY: 'top',
+    overlayX: 'center',
+    overlayY: 'bottom',
+    offsetX: 0,
+    offsetY: -8,
+    panelClass: ['fs-popover-top'],
+  },
+  [Position.South]: {
+    originX: 'center',
+    originY: 'bottom',
+    overlayX: 'center',
+    overlayY: 'top',
+    offsetX: 0,
+    offsetY: 8,
+    panelClass: ['fs-popover-bottom'],
+  },
+  [Position.East]: {
+    originX: 'end',
+    originY: 'center',
+    overlayX: 'start',
+    overlayY: 'center',
+    offsetX: 8,
+    offsetY: 0,
+    panelClass: ['fs-popover-left'],
+  },
+  [Position.West]: {
+    originX: 'start',
+    originY: 'center',
+    overlayX: 'end',
+    overlayY: 'center',
+    offsetX: -8,
+    offsetY: 0,
+    panelClass: ['fs-popover-right'],
+  },
+};
+
+const FALLBACKS: Record<Position, Position> = {
+  [Position.South]: Position.North,
+  [Position.North]: Position.South,
+  [Position.East]: Position.West,
+  [Position.West]: Position.East,
+};
+
 export function createPopupPositionStrategy(el: ElementRef, overlay: Overlay, position: Position): PositionStrategy {
-
-  let overlayX: 'start' | 'center' | 'end' = 'center';
-  let overlayY: 'top' | 'center' | 'bottom' = 'center';
-
-  let originX: 'start' | 'center' | 'end' = 'center';
-  let originY: 'top' | 'center' | 'bottom' = 'center';
-
-  let offsetX = 0;
-  let offsetY = 0;
-
-  let panelClass: string[] = [];
-
-
-    switch (position) {
-    case Position.North:
-      originY = 'top';
-      overlayY = 'bottom';
-      panelClass = ['fs-popover-top'];
-      offsetY = -8;
-      break;
-    case Position.South:
-      originY = 'bottom';
-      overlayY = 'top';
-      panelClass = ['fs-popover-bottom'];
-      offsetY = 8;
-      break;
-    case Position.East:
-      overlayX = 'start';
-      originX = 'end';
-      panelClass = ['fs-popover-left'];
-      offsetX = 8;
-      break;
-    case Position.West:
-      overlayX = 'end';
-      originX = 'start';
-      panelClass = ['fs-popover-right'];
-      offsetX = -8;
-      break;
-  }
+  const primary = POSITIONS[position];
+  const fallback = POSITIONS[FALLBACKS[position]];
 
   return createBasePopupPositionStrategy(el, overlay)
-    .withPositions([
-      {
-        originX: originX,
-        originY: originY,
-        overlayX: overlayX,
-        overlayY: overlayY,
-        offsetX: offsetX,
-        offsetY: offsetY,
-        panelClass: panelClass,
-      }
-    ]);
+    .withPositions([primary, fallback]);
 }
 
 
@@ -63,6 +62,7 @@ function createBasePopupPositionStrategy(el: ElementRef, overlay: Overlay): Flex
   return overlay.position()
     .flexibleConnectedTo(el)
     .withGrowAfterOpen(true)
+    .withPush(true)
     .withFlexibleDimensions(false)
     .withViewportMargin(4);
 }

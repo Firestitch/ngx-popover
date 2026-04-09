@@ -60,10 +60,18 @@ export class FsPopoverWrapperComponent extends BasePortalOutlet implements OnIni
 
     this.wrapperClass = this.popoverRef.wrapperClass;
     this.maxWidth = this.popoverRef.maxWidth;
+    this.maxHeight = this.popoverRef.maxHeight;
   }
 
   public set maxWidth(value: number) {
     this._el.nativeElement.style.maxWidth = value ? `${value  }px` : void 0;
+  }
+
+  public set maxHeight(value: number) {
+    this._el.nativeElement.style.setProperty(
+      '--fs-popover-max-height',
+      value ? `${value}px` : null,
+    );
   }
 
   public set wrapperClass(value: string) {
