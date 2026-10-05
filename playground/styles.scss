@@ -5,6 +5,7 @@
 @import '@firestitch/message/styles';
 @import "@firestitch/drawer/styles";
 @import "@firestitch/skeleton/styles";
+@import '@firestitch/datepicker/styles';
 @import '../src/app/styles.scss';
 
 @include fs-drawer(mat.$m2-blue-palette);

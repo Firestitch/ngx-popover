@@ -1,6 +1,6 @@
 import { OverlayRef } from '@angular/cdk/overlay';
 
-import { BehaviorSubject, combineLatest } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { IPopoverConfig } from '../interfaces/popover-config.interface';
@@ -13,6 +13,7 @@ export class FsPopoverRef {
   private readonly _autoShow$ = new BehaviorSubject<boolean>(true);
   private readonly _autoClose$ = new BehaviorSubject<boolean>(true);
   private readonly _componentLoading$ = new BehaviorSubject<boolean>(true);
+  private readonly _closed$ = new Subject<void>();
   private _maxWidth: number;
   private _maxHeight: number;
   private _wrapperClass: string;
@@ -96,6 +97,14 @@ export class FsPopoverRef {
     return this._maxHeight;
   }
 
+  /**
+   * Emits after each close(). A panel listens to it, so content that calls
+   * `popover.close()` closes the panel the same way Escape or an outside click does.
+   */
+  public get closed$(): Observable<void> {
+    return this._closed$.asObservable();
+  }
+
   public show() {
     setTimeout(() => {
       this._componentLoading$.next(false);
@@ -108,6 +117,7 @@ export class FsPopoverRef {
   public close() {
     this.overlayRef.detach();
     this._componentLoading$.next(true);
+    this._closed$.next();
   }
 
   public updatePosition() {

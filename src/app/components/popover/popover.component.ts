@@ -5,6 +5,7 @@ import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'fs-popover',
+    exportAs: 'fsPopover',
     templateUrl: 'popover.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
     host: {

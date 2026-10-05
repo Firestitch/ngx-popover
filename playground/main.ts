@@ -13,6 +13,7 @@ import { FsSkeletonModule } from '@firestitch/skeleton';
 import { provideRouter, Routes } from '@angular/router';
 import { ExamplesComponent } from './app/components';
 import { FsMenuModule } from '@firestitch/menu';
+import { FsDatePickerModule } from '@firestitch/datepicker';
 import { AppComponent } from './app/app.component';
 
 const routes: Routes = [
@@ -27,7 +28,7 @@ if (environment.production) {
 
 bootstrapApplication(AppComponent, {
     providers: [
-        importProvidersFrom(BrowserModule, FormsModule, FsLabelModule, FsExampleModule.forRoot(), FsMessageModule.forRoot(), FsSkeletonModule, FsMenuModule),
+        importProvidersFrom(BrowserModule, FormsModule, FsLabelModule, FsExampleModule.forRoot(), FsMessageModule.forRoot(), FsSkeletonModule, FsMenuModule, FsDatePickerModule.forRoot()),
         provideAnimations(),
         provideRouter(routes),
     ]

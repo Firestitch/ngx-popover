@@ -1,0 +1,131 @@
+<ng-template
+    #filterPanel
+    let-popover="popover">
+  <div class="fs-column.gap-sm panel">
+    <div class="panel-title">
+      Filter rows
+    </div>
+    <mat-form-field>
+      <mat-label>
+        Name contains
+      </mat-label>
+      <input
+        matInput
+        name="name"
+        [(ngModel)]="name">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>
+        Created from
+      </mat-label>
+      <input
+        matInput
+        fsDatePicker
+        name="from"
+        [(ngModel)]="from">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>
+        Status
+      </mat-label>
+      <mat-select
+          name="status"
+          [(ngModel)]="status">
+        @for (item of statuses; track item.value) {
+          <mat-option [value]="item.value">
+            {{ item.name }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <div class="fs-row.gap-sm.justify-end">
+      <button
+          mat-button
+          type="button"
+          (click)="popover.close()">
+        Cancel
+      </button>
+      <button
+          mat-flat-button
+          color="primary"
+          type="button"
+          (click)="apply(popover)">
+        Apply
+      </button>
+    </div>
+  </div>
+</ng-template>
+<div class="fs-column.gap-md example">
+  <div class="fs-row.gap-sm">
+    <button
+        mat-raised-button
+        color="primary"
+        type="button"
+        class="open-panel"
+        fsPopover
+        [panel]="true"
+        [template]="filterPanel"
+        [maxWidth]="320"
+        [indication]="false"
+        (closed)="panelClosed()">
+      Open panel
+    </button>
+    <button
+        mat-stroked-button
+        type="button"
+        class="open-anchor"
+        (click)="anchor.open()">
+      Open with open()
+    </button>
+    <span
+        #anchor="fsPopover"
+        class="anchor"
+        fsPopover
+        [panel]="true"
+        [template]="filterPanel"
+        [maxWidth]="320"
+        [indication]="false"
+        (closed)="panelClosed()">
+      Anchor
+    </span>
+  </div>
+  <div class="status">
+    @if (applied(); as values) {
+      Applied: name "{{ values.name }}", from {{ values.from ? (values.from | date: 'yyyy-MM-dd') : 'any date' }}, status {{ values.status }}
+    } @else {
+      Nothing applied yet
+    }
+    · Closed {{ closedCount() }} times
+  </div>
+  <div class="fs-row.gap-sm">
+    <button
+        mat-stroked-button
+        type="button"
+        class="text-panel"
+        fsPopover
+        [panel]="true"
+        [indication]="false"
+        text="Text only: nothing inside takes focus, so the panel itself does.">
+      Text panel
+    </button>
+    <button
+        mat-stroked-button
+        type="button"
+        class="click-trigger"
+        fsPopover
+        trigger="click"
+        [indication]="false"
+        text="Click trigger: closes when the mouse leaves.">
+      Click trigger (unchanged)
+    </button>
+    <button
+        mat-stroked-button
+        type="button"
+        class="hover-trigger"
+        fsPopover
+        [indication]="false"
+        text="Hover trigger">
+      Hover trigger (unchanged)
+    </button>
+  </div>
+</div>

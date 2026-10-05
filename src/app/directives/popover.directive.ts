@@ -1,5 +1,27 @@
-import { Directive, ElementRef, HostBinding, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import {
+  Directive,
+  ElementRef,
+  HostBinding,
+  Injector,
+  Input,
+  NgZone,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+  TemplateRef,
+  booleanAttribute,
+  inject,
+  input,
+  output,
+} from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
+
+import { ConfigurableFocusTrapFactory, FocusTrap } from '@angular/cdk/a11y';
+import { hasModifierKey } from '@angular/cdk/keycodes';
+import { Overlay, OverlayRef } from '@angular/cdk/overlay';
+import { ComponentPortal } from '@angular/cdk/portal';
 
 import { guid } from '@firestitch/common';
 
@@ -13,6 +35,7 @@ import {
   mapTo,
   startWith,
   switchMap,
+  take,
   takeUntil,
   tap,
   withLatestFrom,
@@ -20,13 +43,19 @@ import {
 
 
 import { FsPopoverRef } from '../class/popover-ref';
+import { FsPopoverWrapperComponent } from '../components/popover-wrapper/popover-wrapper.component';
 import { Position } from '../enums/position';
+import { createInjector } from '../helpers/create-injector';
+import { createOverlayRef } from '../helpers/create-overlay-ref';
+import { createTempatePortal } from '../helpers/create-template-portal';
+import { hasOverlayAbove } from '../helpers/has-overlay-above';
 import { pointInRect } from '../helpers/point-in-rect';
 import { FsPopoverService } from '../services/popover.service';
 
 
 @Directive({
   selector: '[fsPopover]',
+  exportAs: 'fsPopover',
   host: {
     'class': 'fs-popover',
   },
@@ -90,6 +119,19 @@ export class FsPopoverDirective implements OnInit, OnChanges, OnDestroy {
   @HostBinding('class.fs-popover-enabled')
   public enabled = true;
 
+  /**
+   * Panel mode: a host click or open() opens it; it stays open until close(), an outside
+   * click, Escape (only when no later overlay with a backdrop sits above it) or `popover.close()`
+   * from the content. Focus is trapped inside and returns on close to the element that had it
+   * when the panel opened. `trigger`, `showDelay`, `leaveDelay` and `autoClose` don't apply.
+   */
+  public panel = input(false, { transform: booleanAttribute });
+
+  /**
+   * Emits each time the panel closes.
+   */
+  public closed = output<void>();
+
   private _initialized = false;
 
   private _popoverRef: FsPopoverRef;
@@ -107,6 +149,15 @@ export class FsPopoverDirective implements OnInit, OnChanges, OnDestroy {
   private _ngZone = inject(NgZone);
   private _router = inject(Router, { optional: true });
   private _guid = guid('xxxxxxx');
+  private _overlay = inject(Overlay);
+  private _injector = inject(Injector);
+  private _focusTrapFactory = inject(ConfigurableFocusTrapFactory);
+  private _document = inject(DOCUMENT);
+  private _panelOverlayRef: OverlayRef;
+  private _panelFocusTrap: FocusTrap;
+  private _panelOpener: HTMLElement;
+  private _panelTopmostKeydown: KeyboardEvent;
+  private _panelClosed$ = new Subject<void>();
 
   constructor() {
     this._mouseEnter$ = fromEvent(this._elRef.nativeElement, 'mouseenter');
@@ -137,8 +188,38 @@ export class FsPopoverDirective implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnDestroy() {
+    if (this._panelOverlayRef) {
+      this._finishPanel(false);
+    }
+
     this._popoverClosed$.next(null);
     this._destroy$.next(null);
+  }
+
+  /**
+   * Opens the panel on this element. Panel mode only.
+   */
+  public open(): void {
+    if (!this.panel() || !this.enabled || !this._initialized || this._panelOverlayRef) {
+      return;
+    }
+
+    this._ngZone.run(() => this._openPanel());
+  }
+
+  /**
+   * Closes the panel, or in hover and click modes the open popover.
+   */
+  public close(): void {
+    if (!this.panel()) {
+      this._closePopover();
+
+      return;
+    }
+
+    if (this._panelOverlayRef) {
+      this._ngZone.run(() => this._popoverRef.close());
+    }
   }
 
   private _closePopover() {
@@ -171,7 +252,9 @@ export class FsPopoverDirective implements OnInit, OnChanges, OnDestroy {
     });
 
     this._ngZone.runOutsideAngular(() => {
-      if (this.trigger === 'click') {
+      if (this.panel()) {
+        this._listenPanelHostClick();
+      } else if (this.trigger === 'click') {
         this._listenMouseHostClick();
       } else {
         this._listenMouseHostEnter();
@@ -197,7 +280,7 @@ export class FsPopoverDirective implements OnInit, OnChanges, OnDestroy {
         ),
       )
       .subscribe(() => {
-        this._closePopover();
+        this.close();
       });
   }
 
@@ -326,5 +409,141 @@ export class FsPopoverDirective implements OnInit, OnChanges, OnDestroy {
     );
 
     return !pointInHostRect && !pointInPopoverRect;
+  }
+
+  private _listenPanelHostClick(): void {
+    fromEvent<MouseEvent>(this._elRef.nativeElement, 'click')
+      .pipe(
+        filter(() => this.enabled),
+        tap((event) => {
+          event.stopPropagation();
+          this.open();
+        }),
+        takeUntil(this._destroy$),
+      )
+      .subscribe();
+  }
+
+  private _openPanel(): void {
+    this._panelOpener = this._document.activeElement as HTMLElement;
+    this._panelOverlayRef = createOverlayRef(this._elRef, this._overlay, this.position, true);
+    this._popoverRef.overlayRef = this._panelOverlayRef;
+
+    const wrapperElement = this._attachPanelContent(this._panelOverlayRef);
+
+    this._trapPanelFocus(wrapperElement);
+    this._listenPanelClose(this._panelOverlayRef);
+    this._listenPanelEscape(this._panelOverlayRef);
+  }
+
+  private _attachPanelContent(overlayRef: OverlayRef): HTMLElement {
+    const wrapperRef = overlayRef.attach(
+      new ComponentPortal(
+        FsPopoverWrapperComponent,
+        null,
+        createInjector(this._popoverRef, this._injector),
+      ),
+    );
+
+    if (this.template) {
+      wrapperRef.instance
+        .attachTemplatePortal(createTempatePortal(this.template, this._popoverRef, this.data));
+    } else {
+      wrapperRef.instance.setTextualContent(this.text);
+    }
+
+    return wrapperRef.location.nativeElement;
+  }
+
+  /**
+   * The configurable trap also pulls focus back when it lands outside the panel, for
+   * example on the first Tab after a calendar inside closed and took the focused element
+   * with it. Focus inside other overlays (a select, a calendar) is left alone.
+   */
+  private _trapPanelFocus(wrapperElement: HTMLElement): void {
+    this._panelFocusTrap = this._focusTrapFactory.create(wrapperElement);
+    this._panelFocusTrap.focusInitialElementWhenReady()
+      .then((focused) => {
+        // Nothing inside takes focus (text only): the panel itself becomes the one
+        // tab stop, so the opener behind the backdrop doesn't keep focus.
+        if (!focused && wrapperElement.isConnected) {
+          wrapperElement.setAttribute('tabindex', '0');
+          wrapperElement.style.outline = 'none';
+          wrapperElement.focus();
+        }
+      });
+  }
+
+  private _listenPanelClose(overlayRef: OverlayRef): void {
+    overlayRef.backdropClick()
+      .pipe(
+        tap(() => this.close()),
+        takeUntil(this._panelClosed$),
+      )
+      .subscribe();
+
+    // Every close (close(), the backdrop, Escape, or `popover.close()` from the
+    // content) goes through FsPopoverRef.close(), which detaches and then emits.
+    this._popoverRef.closed$
+      .pipe(
+        take(1),
+        tap(() => this._finishPanel(true)),
+        takeUntil(this._panelClosed$),
+      )
+      .subscribe();
+  }
+
+  /**
+   * Escape closes the panel only when no later overlay with a backdrop sits above it, so
+   * Escape in a calendar, select or menu opened from the panel closes only that. The check
+   * runs in the capture phase, before any handler inside closes its own overlay; fs-datepicker,
+   * for one, closes its calendar from the input's keydown and from a document listener.
+   */
+  private _listenPanelEscape(overlayRef: OverlayRef): void {
+    this._ngZone.runOutsideAngular(() => {
+      fromEvent<KeyboardEvent>(this._document, 'keydown', { capture: true })
+        .pipe(
+          tap((event) => {
+            this._panelTopmostKeydown = hasOverlayAbove(overlayRef) ? null : event;
+          }),
+          takeUntil(this._panelClosed$),
+        )
+        .subscribe();
+    });
+
+    overlayRef.keydownEvents()
+      .pipe(
+        filter((event) => event.key === 'Escape' && !hasModifierKey(event)),
+        filter((event) => event === this._panelTopmostKeydown),
+        tap(() => this.close()),
+        takeUntil(this._panelClosed$),
+      )
+      .subscribe();
+  }
+
+  private _finishPanel(emit: boolean): void {
+    const overlayRef = this._panelOverlayRef;
+
+    this._panelOverlayRef = null;
+    this._panelTopmostKeydown = null;
+    this._panelClosed$.next();
+    this._panelFocusTrap?.destroy();
+    this._panelFocusTrap = null;
+    overlayRef.dispose();
+    this._restorePanelFocus();
+
+    if (emit) {
+      this.closed.emit();
+    }
+  }
+
+  private _restorePanelFocus(): void {
+    const opener = this._panelOpener;
+
+    this._panelOpener = null;
+
+    if (opener?.isConnected && typeof opener.focus === 'function') {
+      opener.focus();
+    }
   }
 }
